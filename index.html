@@ -172,8 +172,8 @@
 
 <!-- ======= CRIME GRADE VIEW ======= -->
 
-<!-- ── HERO ── -->
-<section id="cg-hero-section" class="relative overflow-hidden" style="min-height:calc(100vh - 78px);display:flex;flex-direction:column;justify-content:center;background:radial-gradient(ellipse at 18% -10%,rgba(255,255,255,.5) 0%,transparent 55%),radial-gradient(ellipse at 90% 110%,rgba(13,90,30,.55) 0%,transparent 55%),linear-gradient(160deg,#34d058 0%,#22A620 44%,#1c8a1a 72%,#15691a 100%)">
+<!-- ── HERO (removed) ── -->
+<section id="cg-hero-section" style="display:none">
 
     <!-- grid overlay -->
     <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(6,52,15,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(6,52,15,.08) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 90% at 50% 30%,black,transparent 85%);mask-image:radial-gradient(ellipse 80% 90% at 50% 30%,black,transparent 85%)"></div>
@@ -376,7 +376,7 @@
         <div id="cg-states-view">
 
             <!-- Interactive US Map -->
-            <div id="cg-map-wrap" style="position:relative;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;margin-bottom:32px;padding:18px 20px 14px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.06)">
+            <div id="cg-map-wrap" style="position:relative;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:18px 20px 14px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.06)">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
                     <p style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.18em;text-transform:uppercase">Crime Grade Map · Click a state to explore</p>
                     <div style="display:flex;align-items:center;gap:10px">
@@ -395,103 +395,8 @@
                 <div id="cg-map-tooltip" style="position:absolute;pointer-events:none;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:9px;padding:9px 13px;font-size:12px;color:#0f172a;display:none;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.12);white-space:nowrap;line-height:1.5"></div>
             </div>
 
-            <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-7">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-800">All States</h2>
-                    <p class="text-xs mt-0.5 text-slate-400">Select a state to explore city crime grades</p>
-                </div>
-                <div class="sm:ml-auto relative">
-                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style="color:#94a3b8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
-                    <input id="cg-state-search" class="cg-search" style="padding-left:36px;width:210px" placeholder="Search state…" oninput="cgFilterStates()" />
-                </div>
-            </div>
-            <div id="cg-state-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px"></div>
         </div>
 
-        <!-- CITY TABLE VIEW (drill-down) -->
-        <div id="cg-cities-view" style="display:none">
-            <!-- Breadcrumb -->
-            <div class="flex items-center gap-3 mb-6">
-                <button onclick="cgBackToStates()" class="inline-flex items-center gap-2 text-sm font-semibold transition" style="background:#f1f5f9;border:1px solid rgba(0,0,0,.1);color:#475569;padding:7px 14px;border-radius:4px;cursor:pointer">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                    All States
-                </button>
-                <span class="text-slate-300">/</span>
-                <span class="text-slate-800 font-semibold text-sm" id="cg-state-label">California</span>
-            </div>
-
-            <!-- Controls -->
-            <div class="flex flex-wrap items-center gap-2.5 mb-5">
-                <div class="cg-search-wrap">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
-                    <input class="cg-search" id="cg-search" placeholder="Search city…" oninput="cgGoPage(1);cgCheckReset()" />
-                </div>
-                <select class="cg-sel" id="cg-grade-f" onchange="cgGoPage(1);cgCheckReset()">
-                    <option value="">All grades</option>
-                    <option value="A">A — Safest</option>
-                    <option value="B">B — Below avg</option>
-                    <option value="C">C — Near avg</option>
-                    <option value="D">D — Above avg</option>
-                    <option value="F">F — High crime</option>
-                </select>
-                <select class="cg-sel" id="cg-size-f" onchange="cgGoPage(1);cgCheckReset()">
-                    <option value="">All sizes</option>
-                    <option value="mega">Mega (1M+)</option>
-                    <option value="large">Large (500k–1M)</option>
-                    <option value="medium">Medium (100k–500k)</option>
-                    <option value="small">Smaller (&lt;100k)</option>
-                </select>
-                <button class="cg-reset-btn" id="cg-reset-btn" onclick="cgReset()">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 3v5h5"/></svg>
-                    Reset
-                </button>
-                <span class="ml-auto text-xs text-slate-500 font-medium" id="cg-count"></span>
-            </div>
-
-            <!-- Table card -->
-            <div class="overflow-hidden border border-slate-200" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.07);border-radius:8px">
-                <div class="cg-tbl-wrap">
-                    <table class="cg-tbl">
-                        <thead>
-                            <tr>
-                                <th onclick="cgSort('rank')"># <span id="cg-a-rank">↕</span></th>
-                                <th onclick="cgSort('city')">City <span id="cg-a-city">↕</span></th>
-                                <th onclick="cgSort('grade')">Grade <span id="cg-a-grade">↕</span></th>
-                                <th onclick="cgSort('decile')">Decile <span id="cg-a-decile">↕</span></th>
-                                <th onclick="cgSort('violent')">Violent /100k <span id="cg-a-violent">↕</span></th>
-                                <th onclick="cgSort('property')">Property /100k <span id="cg-a-property">↕</span></th>
-                                <th onclick="cgSort('murder')">Murder /100k <span id="cg-a-murder">↕</span></th>
-                                <th onclick="cgSort('total')">Total /100k <span id="cg-a-total">↕</span></th>
-                                <th>Pop.</th>
-                                <th>Trend</th>
-                                <th>Analysis</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cg-tbody"></tbody>
-                    </table>
-                </div>
-                <div class="px-5 py-4 flex flex-wrap items-center gap-2" style="border-top:1px solid rgba(0,0,0,.07)" id="cg-pg"></div>
-            </div>
-        </div>
-
-        <!-- AI Panel -->
-        <div class="cg-ai-panel" id="cg-ai-panel">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="grid place-items-center w-7 h-7 rounded-full flex-shrink-0" style="background:linear-gradient(135deg,#E24B4A,#ff8c42)">
-                    <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.7 5.6 5.6 1.7-5.6 1.7L12 16.6l-1.7-5.6-5.6-1.7 5.6-1.7L12 2z"/></svg>
-                </span>
-                <p class="text-sm font-bold text-slate-800 flex-1" id="cg-ai-title">City Analysis</p>
-                <span class="text-[10px] font-semibold rounded-full px-2.5 py-1" style="background:rgba(226,75,74,.1);color:#E24B4A">2024 Final</span>
-                <button onclick="document.getElementById('cg-ai-panel').classList.remove('cg-show')" class="grid place-items-center w-6 h-6 rounded-full text-slate-400 hover:text-slate-700 transition" style="background:rgba(0,0,0,.06)">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <p class="text-sm text-slate-600 leading-relaxed" id="cg-ai-body">Loading…</p>
-        </div>
-
-        <p class="mt-8 text-xs leading-relaxed max-w-4xl text-slate-400">
-            <strong class="text-slate-500">Source:</strong> FBI Uniform Crime Reporting (UCR) Program, 2024 — final annual data released August 2025. Covers 120+ major US cities. Grades computed by decile rank among all cities in the dataset (violent crime weighted 60%, property 40%). The FBI recommends against city rankings for policy decisions; this data is provided for public awareness only.
-        </p>
     </div>
 </section>
 
