@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Canada Crime Grade Map — Province-level homicide rates and safety rankings." />
+    <title>Canada Crime Grade — Auxilio</title>
+    <link rel="icon" type="image/png" href="images/auxilio-logo-new.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','ui-sans-serif','system-ui','sans-serif']}}}}</script>
+    <style>
+    *{box-sizing:border-box}body{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;margin:0;background:#f1f5f9}
+    [data-nav].is-scrolled{box-shadow:0 8px 24px -12px rgba(10,26,74,.45)}
+    [data-menu-panel]{transform:translateY(-12px);opacity:0;pointer-events:none;transition:.25s ease}[data-menu-panel].is-open{transform:none;opacity:1;pointer-events:auto}
+    @keyframes cgMapSpin{to{transform:rotate(360deg)}}
+    @keyframes cgCardIn{from{opacity:0;transform:translateY(18px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .cgpf-btn{border:2px solid transparent;border-radius:22px;padding:5px 14px;font-size:11.5px;font-weight:700;cursor:pointer;letter-spacing:.03em;line-height:1.4;transition:all .18s cubic-bezier(.4,0,.2,1)}
+    .cgpf-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.12)}.cgpf-btn.active{color:#fff !important;box-shadow:0 4px 14px rgba(0,0,0,.22)}
+    .cg-prov-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+    @media(max-width:1024px){.cg-prov-grid{grid-template-columns:repeat(4,1fr)}}@media(max-width:768px){.cg-prov-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:500px){.cg-prov-grid{grid-template-columns:repeat(2,1fr)}}
+    .cg-prov-card{background:#fff;border-radius:13px;padding:13px 12px 11px;cursor:pointer;border:2px solid transparent;transition:border-color .2s,box-shadow .22s,transform .18s;position:relative;overflow:hidden;animation:cgCardIn .4s ease both}
+    .cg-prov-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.11);transform:translateY(-3px)}.cg-prov-card.cgsel{box-shadow:0 8px 26px rgba(0,0,0,.16);transform:translateY(-3px)}
+    .cg-card-bar-wrap{height:4px;border-radius:2px;background:#e9edf3;margin-top:9px;overflow:hidden}.cg-card-bar{height:100%;border-radius:2px;width:0;transition:width .9s cubic-bezier(.4,0,.2,1)}
+    @keyframes ctBarIn{from{width:0}to{width:var(--ctw,0%)}}@keyframes ctRowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}@keyframes ctPanelIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+    .ct-input{background:#fff;border:1px solid #e2e8f0;border-radius:9px;color:#0f172a;font-size:13px;padding:9px 13px 9px 36px;width:100%;max-width:340px;outline:none;box-shadow:0 1px 3px rgba(0,0,0,.05);transition:border-color .2s,box-shadow .2s}.ct-input:focus{border-color:#399CD8;box-shadow:0 0 0 3px rgba(57,156,216,.12)}.ct-input::placeholder{color:#b0bec5}
+    .ct-sel{background:#fff;border:1px solid #e2e8f0;border-radius:9px;color:#374151;font-size:12.5px;padding:9px 30px 9px 12px;cursor:pointer;outline:none;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.05);transition:border-color .2s,box-shadow .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}.ct-sel:focus{border-color:#399CD8;box-shadow:0 0 0 3px rgba(57,156,216,.12)}
+    .ct-tbl{width:100%;border-collapse:collapse;font-size:12.5px}.ct-tbl thead th{padding:11px 16px;text-align:left;font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;background:#f8fafc;border-bottom:2px solid #e2e8f0}
+    .ct-tbl tbody tr.ct-data-row{cursor:pointer;transition:background .12s}.ct-tbl tbody tr.ct-data-row:hover{background:#ebf5ff}.ct-tbl tbody tr.ct-nat-row{background:#f8fafc}.ct-tbl td{padding:11px 16px;vertical-align:middle}
+    .ct-bar-wrap{height:5px;border-radius:3px;margin-top:6px;background:#e2e8f0;min-width:80px;max-width:160px;overflow:hidden}.ct-bar-fill{height:100%;border-radius:3px;width:var(--ctw,0%)}
+    .ct-grade-b{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;font-size:14px;font-weight:900;transition:transform .18s,box-shadow .18s}.ct-grade-b:hover{transform:scale(1.1);box-shadow:0 4px 14px rgba(0,0,0,.2)}
+    .ct-badge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px}
+    .ct-pgb{padding:6px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;cursor:pointer;background:#fff;color:#475569;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:all .15s;font-weight:500}.ct-pgb:hover{border-color:#399CD8;color:#399CD8;background:#f0f9ff}.ct-pgb.on{background:#22A620;color:#fff;border-color:#22A620;box-shadow:0 2px 8px rgba(34,166,32,.3)}
+    .ct-detail-wrap{overflow:hidden;max-height:0;transition:max-height .38s cubic-bezier(.4,0,.2,1)}.ct-detail-wrap.ctopen{max-height:320px}
+    .ct-detail-inner{padding:18px 20px;background:linear-gradient(135deg,#f8fafc,#edf4ff);border-top:1px solid #e2e8f0;animation:ctPanelIn .3s ease both}
+    .ct-dist-seg{border-radius:6px;height:30px;display:flex;align-items:center;justify-content:center;gap:5px;padding:0 10px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap;transition:flex .45s cubic-bezier(.4,0,.2,1),opacity .2s;overflow:hidden;min-width:32px}
+    #ct-lang-btn{position:fixed;bottom:28px;right:28px;z-index:999;width:52px;height:52px;border-radius:50%;background:#0a1a4a;color:#fff;font-size:20px;border:none;cursor:pointer;box-shadow:0 6px 24px rgba(10,26,74,.45);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s}#ct-lang-btn:hover{transform:scale(1.08)}
+    #ct-lang-menu{position:fixed;bottom:90px;right:28px;z-index:998;background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.14);padding:6px;min-width:155px;transform:scale(.9) translateY(8px);opacity:0;pointer-events:none;transition:all .22s cubic-bezier(.16,1,.3,1);transform-origin:bottom right}#ct-lang-menu.lopen{transform:scale(1) translateY(0);opacity:1;pointer-events:auto}
+    .ct-lang-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:9px;cursor:pointer;transition:background .12s;font-size:13px;font-weight:500;color:#1e293b}.ct-lang-opt:hover{background:#f1f5f9}.ct-lang-opt.active{background:#f0f7ff;color:#1d4ed8;font-weight:600}
+    #cg-prov-section{background:linear-gradient(180deg,#d4deeb 0%,#e8eef6 100%);padding:30px 0 28px}
+    </style>
+</head>
+<body>
+<header data-nav style="background-color:#0a1a4a" class="fixed inset-x-0 top-0 z-50 text-white">
+    <nav class="mx-auto flex h-[72px] max-w-7xl items-center px-5 sm:px-8">
+        <a href="index.html" class="flex shrink-0 items-center gap-2.5 group mr-8"><span class="grid place-items-center h-9 w-9 rounded-md bg-white shadow-sm p-1 transition-transform group-hover:rotate-[-4deg]"><img src="images/auxilio-logo-new.png" alt="" class="h-full w-auto object-contain" /></span><img src="images/auxilio-logo-white.png" alt="Auxilio" class="h-5 w-auto hidden sm:block" /></a>
+        <ul class="hidden lg:flex flex-1 items-center justify-center gap-1 xl:gap-1.5 text-sm font-medium text-white/80 whitespace-nowrap">
+            <li><a href="index.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇩🇴 Dom. Republic</a></li>
+            <li><a href="el-salvador.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇸🇻 El Salvador</a></li>
+            <li><a href="mexico.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇲🇽 Mexico</a></li>
+            <li><a href="ecuador.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇪🇨 Ecuador</a></li>
+            <li><a href="peru.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇵🇪 Peru</a></li>
+            <li><a href="canada.html" style="background:rgba(255,255,255,.15)" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-white font-bold text-xs">🇨🇦 Canada</a></li>
+        </ul>
+        <button class="ml-auto lg:hidden flex flex-col gap-1.5 p-2" onclick="document.getElementById('mobile-menu').classList.toggle('is-open')" aria-label="Menu"><span class="block w-5 h-0.5 bg-white"></span><span class="block w-5 h-0.5 bg-white"></span><span class="block w-5 h-0.5 bg-white"></span></button>
+    </nav>
+    <div id="mobile-menu" data-menu-panel class="lg:hidden absolute inset-x-4 top-[68px] rounded-xl bg-white border border-slate-100 shadow-xl p-5">
+        <ul class="flex flex-col gap-1 text-sm font-medium">
+            <li><a href="index.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇩🇴 Dominican Republic</a></li>
+            <li><a href="el-salvador.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇸🇻 El Salvador</a></li>
+            <li><a href="mexico.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇲🇽 Mexico</a></li>
+            <li><a href="ecuador.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇪🇨 Ecuador</a></li>
+            <li><a href="peru.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇵🇪 Peru</a></li>
+            <li><a href="canada.html" class="flex items-center gap-2 font-bold text-blue-900 bg-blue-50 rounded-lg px-3 py-2.5">🇨🇦 Canada <span class="ml-auto text-xs text-blue-400 font-normal">Active</span></a></li>
+        </ul>
+    </div>
+</header>
+<main style="padding-top:72px">
+<section style="background:linear-gradient(135deg,#0a1a4a 0%,#1d4a7a 60%,#c41e3a 100%);padding:40px 0 36px">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+    <div style="font-size:10px;color:rgba(255,255,255,.45);letter-spacing:.22em;text-transform:uppercase;margin-bottom:10px">Auxilio · Crime Grade Map</div>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div><h1 style="font-size:26px;font-weight:900;color:#fff;margin:0 0 4px;letter-spacing:-.02em">🇨🇦 Canada</h1><p style="font-size:12px;color:rgba(255,255,255,.55);margin:0">13 Provinces &amp; Territories · Homicide /100k · StatCan Data · 2022</p></div>
+      <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 18px;text-align:center"><div style="font-size:22px;font-weight:900;color:#22A620">13</div><div style="font-size:10px;color:rgba(255,255,255,.45);margin-top:2px;letter-spacing:.08em;text-transform:uppercase">Regions</div></div>
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 18px;text-align:center"><div style="font-size:22px;font-weight:900;color:#22A620">2</div><div style="font-size:10px;color:rgba(255,255,255,.45);margin-top:2px;letter-spacing:.08em;text-transform:uppercase">Natl Avg /100k</div></div>
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 18px;text-align:center"><div style="font-size:22px;font-weight:900;color:#22A620" id="ca-stat-min">1</div><div style="font-size:10px;color:rgba(255,255,255,.45);margin-top:2px;letter-spacing:.08em;text-transform:uppercase">Min /100k</div></div>
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 18px;text-align:center"><div style="font-size:22px;font-weight:900;color:#399CD8" id="ca-stat-max">13</div><div style="font-size:10px;color:rgba(255,255,255,.45);margin-top:2px;letter-spacing:.08em;text-transform:uppercase">Max /100k</div></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:20px;flex-wrap:wrap">
+      <span style="font-size:10px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.12em;text-transform:uppercase;align-self:center;margin-right:4px">GRADES</span>
+      <span style="background:#22A620;color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">A &lt;8</span><span style="background:#399CD8;color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">B 8–18</span><span style="background:#F1B72C;color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">C 18–28</span><span style="background:#EE7728;color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">D 28–42</span><span style="background:#E6201A;color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">F ≥42</span>
+    </div>
+  </div>
+</section>
+
+<section id="cg-main-section" style="background:linear-gradient(180deg,#e8eef6,#dde5f0);padding:32px 0">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+    <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.07)">
+      <p style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.18em;text-transform:uppercase;margin:0 0 12px">🇨🇦 Crime Grade Map · Canada · Provinces &amp; Territories</p>
+      <div id="cg-map-loading" style="display:flex;align-items:center;justify-content:center;height:400px;color:#94a3b8;font-size:12px;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" style="animation:cgMapSpin 1s linear infinite;flex-shrink:0"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-opacity=".2"/><path d="M21 12a9 9 0 00-9-9"/></svg>Loading map…</div>
+      <div id="cg-map-container" style="width:100%;border-radius:6px;overflow:hidden;position:relative"></div>
+      <div id="cg-map-tooltip" style="position:fixed;pointer-events:none;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:9px;padding:9px 13px;font-size:12px;color:#0f172a;display:none;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.12);white-space:nowrap;line-height:1.5"></div>
+    </div>
+  </div>
+</section>
+
+<section id="cg-prov-section">
+  <div style="max-width:1400px;margin:0 auto;padding:0 24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+      <div><div style="font-size:14px;font-weight:800;color:#0f172a">🗺️ All 13 Provinces &amp; Territories</div><div style="font-size:11px;color:#64748b;margin-top:3px">Click a card to filter the table below</div></div>
+      <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+        <div id="cgpf-tabs" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+        <div id="cg-sel-badge" style="display:none;align-items:center;gap:5px;background:#fff;border:1.5px solid #e2e8f0;border-radius:20px;padding:4px 8px 4px 11px;font-size:12px;font-weight:600;color:#0f172a;box-shadow:0 1px 4px rgba(0,0,0,.07)"><span style="font-size:10px;margin-right:1px">📍</span><span id="cg-sel-text" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><span onclick="cgProvClearSel()" style="cursor:pointer;color:#94a3b8;font-size:16px;line-height:1;margin-left:3px;flex-shrink:0" title="Clear">×</span></div>
+      </div>
+    </div>
+    <div id="cg-prov-grid" class="cg-prov-grid"></div>
+  </div>
+</section>
+
+<section id="ct-section" style="background:#f1f5f9;padding:36px 0 60px">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px">
+      <div><div style="font-size:16px;font-weight:600;color:#0f172a">🇨🇦 Crime Grade · Canada — By Province · 2022</div><div style="font-size:11px;color:#94a3b8;margin-top:4px">Homicide /100k · StatCan · 13 provinces &amp; territories</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span class="ct-badge" style="background:#dcfce7;color:#15803d">StatCan</span><span class="ct-badge" style="background:#dbeafe;color:#1d4ed8">13 Regions</span><span class="ct-badge" style="background:#fef9c3;color:#a16207">✦ 2022</span><span class="ct-badge" style="background:#dcfce7;color:#15803d">✓ Low-crime</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;max-width:500px">
+      <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)"><div id="ct-total" style="font-size:22px;font-weight:700;color:#0f172a">13</div><div style="font-size:10px;color:#94a3b8;margin-top:3px;text-transform:uppercase;letter-spacing:.1em">Regions</div></div>
+      <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)"><div id="ct-stat-min" style="font-size:22px;font-weight:700;color:#15803d">1</div><div style="font-size:10px;color:#94a3b8;margin-top:3px;text-transform:uppercase;letter-spacing:.1em">Min /100k</div></div>
+      <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)"><div id="ct-stat-max" style="font-size:22px;font-weight:700;color:#1d4ed8">13</div><div style="font-size:10px;color:#94a3b8;margin-top:3px;text-transform:uppercase;letter-spacing:.1em">Max /100k</div></div>
+    </div>
+    <div style="margin-bottom:16px"><div id="ct-dist-label" style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px">Grade Distribution — All 13 Regions</div><div id="ct-dist" style="display:flex;gap:3px;align-items:center;height:30px"></div></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+      <div style="position:relative"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input id="ct-search" class="ct-input" placeholder="Search province…" oninput="ctGoPage(1)"/></div>
+      <select id="ct-grade-f" class="ct-sel" onchange="ctGoPage(1)"><option value="">All grades</option><option value="A">Grade A</option><option value="B">Grade B</option><option value="C">Grade C</option><option value="D">Grade D</option><option value="F">Grade F</option></select>
+      <select id="ct-sort" class="ct-sel" onchange="ctGoPage(1)"><option value="hom">Homicide ↑</option><option value="pop">Population ↓</option><option value="az">Province A–Z</option></select>
+    </div>
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 16px;margin-bottom:14px;font-size:12px;color:#64748b;line-height:1.8;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+      <strong style="color:#0f172a;font-weight:600">National avg homicide /100k:</strong>
+      <span style="margin:0 8px">2020: <strong>2.0</strong></span><span style="margin:0 8px">2021: <strong>2.1</strong> <span style="color:#dc2626;font-weight:600">↑</span></span><span style="margin:0 8px">2022: <strong>2.3</strong> <span style="color:#dc2626;font-weight:600">↑</span></span>
+    </div>
+    <div style="background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+      <table class="ct-tbl"><thead><tr><th style="width:44px">#</th><th>Province / Territory</th><th>Grade</th><th>Homicide /100k</th><th>Population</th><th>vs National</th><th>Trend</th></tr></thead><tbody id="ct-tbody"></tbody></table>
+    </div>
+    <div id="ct-pgr" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;align-items:center"></div>
+    <p style="font-size:10px;color:#94a3b8;margin-top:12px">Sources: Statistics Canada · Uniform Crime Reporting Survey · 2022 · Homicide rate per 100,000 inhabitants</p>
+  </div>
+</section>
+</main>
+<button id="ct-lang-btn" onclick="ctLangToggle()" title="Switch language" aria-label="Switch language">🌐</button>
+<div id="ct-lang-menu" role="menu"><div class="ct-lang-opt active" onclick="ctLangSet('en')">🇺🇸 &nbsp;English</div><div class="ct-lang-opt" onclick="ctLangSet('fr')">🇨🇦 &nbsp;Français</div><div class="ct-lang-opt" onclick="ctLangSet('es')">🇪🇸 &nbsp;Español</div></div>
+<script>
+var EC_PROVINCES={
+  'CA-AB':{name:'Alberta',homicide:3,pop:4660000,trend:'up'},
+  'CA-BC':{name:'British Columbia',homicide:2,pop:5400000,trend:'dn'},
+  'CA-MB':{name:'Manitoba',homicide:6,pop:1390000,trend:'up'},
+  'CA-NB':{name:'New Brunswick',homicide:2,pop:820000,trend:'dn'},
+  'CA-NL':{name:'Newfoundland & Labrador',homicide:1,pop:520000,trend:'dn'},
+  'CA-NS':{name:'Nova Scotia',homicide:2,pop:1030000,trend:'dn'},
+  'CA-NT':{name:'Northwest Territories',homicide:7,pop:45000,trend:'up'},
+  'CA-NU':{name:'Nunavut',homicide:13,pop:40000,trend:'up'},
+  'CA-ON':{name:'Ontario',homicide:2,pop:15000000,trend:'up'},
+  'CA-PE':{name:'Prince Edward Island',homicide:1,pop:170000,trend:'dn'},
+  'CA-QC':{name:'Québec',homicide:1,pop:8700000,trend:'dn'},
+  'CA-SK':{name:'Saskatchewan',homicide:7,pop:1200000,trend:'up'},
+  'CA-YT':{name:'Yukon',homicide:5,pop:45000,trend:'up'}
+};
+var CT_GC={A:{bg:'#22A620',tx:'#fff',bar:'#22A620'},B:{bg:'#399CD8',tx:'#fff',bar:'#399CD8'},C:{bg:'#F1B72C',tx:'#fff',bar:'#F1B72C'},D:{bg:'#EE7728',tx:'#fff',bar:'#EE7728'},F:{bg:'#E6201A',tx:'#fff',bar:'#E6201A'}};
+var CT_MAX=13,CT_NAT=2,CT_PER=15,ctPage=1;
+var EC_TABLE=(function(){var arr=[];Object.keys(EC_PROVINCES).forEach(function(id){var d=EC_PROVINCES[id];arr.push({province:d.name,pop:d.pop,homicide:d.homicide,trend:d.trend});});arr.sort(function(a,b){return b.homicide-a.homicide;});return arr;})();
+window.COUNTRY_TABLE=EC_TABLE;
+function ctGrade(v){return v<8?'A':v<18?'B':v<28?'C':v<42?'D':'F';}
+function fmtPop(p){return p>=1e6?(p/1e6).toFixed(1)+'M':(p/1000).toFixed(0)+'K';}
+function vsNat(v){var d=v-CT_NAT;if(d<0)return'<span style="color:#16a34a;font-weight:600">↓ −'+Math.abs(d)+'</span>';if(d===0)return'→ avg';return'<span style="color:#dc2626;font-weight:600">↑ +'+d+'</span>';}
+function ctFiltered(){var q=(document.getElementById('ct-search').value||'').toLowerCase();var gf=document.getElementById('ct-grade-f').value;var sf=document.getElementById('ct-sort').value;var data=EC_TABLE.filter(function(d){if(q&&d.province.toLowerCase().indexOf(q)<0)return false;if(gf&&ctGrade(d.homicide)!==gf)return false;return true;});if(sf==='pop')data.sort(function(a,b){return b.pop-a.pop;});else if(sf==='az')data.sort(function(a,b){return a.province.localeCompare(b.province);});else data.sort(function(a,b){return b.homicide-a.homicide;});return data;}
+function ctRender(){
+  var all=ctFiltered();var totalPages=Math.max(1,Math.ceil(all.length/CT_PER));if(ctPage>totalPages)ctPage=1;var page=all.slice((ctPage-1)*CT_PER,ctPage*CT_PER);
+  var dist={A:0,B:0,C:0,D:0,F:0};EC_TABLE.forEach(function(d){dist[ctGrade(d.homicide)]++;});
+  var distEl=document.getElementById('ct-dist');if(distEl){distEl.innerHTML='';['A','B','C','D','F'].forEach(function(g){if(!dist[g])return;var seg=document.createElement('div');seg.className='ct-dist-seg';seg.style.background=CT_GC[g].bg;seg.style.flex=dist[g];seg.innerHTML='<span>'+g+'</span><span style="font-size:9.5px;opacity:.8">('+dist[g]+')</span>';distEl.appendChild(seg);});}
+  var html='<tr class="ct-nat-row"><td style="color:#94a3b8;font-size:11px">—</td><td><span style="font-weight:600;color:#64748b;font-size:12px">🇨🇦 National Average</span></td><td><span style="background:#22A620;color:#fff;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700">A</span></td><td><div style="font-size:13px;font-weight:700;color:#475569">'+CT_NAT+'</div></td><td style="color:#94a3b8;font-size:11px">39.0M</td><td>—</td><td>—</td></tr>';
+  page.forEach(function(d,i){
+    var rank=((ctPage-1)*CT_PER)+i+1;var g=ctGrade(d.homicide);var gc=CT_GC[g];var pct=Math.round(d.homicide/CT_MAX*100)+'%';var delay=(i*0.04)+'s';var barDelay=(i*0.04+0.1)+'s';
+    var trendHtml=d.trend==='up'?'<span style="color:#dc2626;font-weight:600">↑ Rising</span>':'<span style="color:#16a34a;font-weight:600">↓ Falling</span>';
+    var topBadge=rank===1?' <span style="font-size:9px;background:#fee2e2;color:#b91c1c;border-radius:5px;padding:1px 5px;font-weight:600;margin-left:4px">Highest</span>':'';
+    var detailHtml='<div class="ct-detail-inner"><div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div><span class="ct-grade-b" style="background:'+gc.bg+';color:#fff;width:44px;height:44px;font-size:20px">'+g+'</span></div><div><div style="font-size:14px;font-weight:800;color:#0f172a">'+d.province+'</div><div style="font-size:11px;color:#64748b;margin-top:2px">'+d.homicide+' homicides/100k · Pop. '+fmtPop(d.pop)+'</div></div><div style="margin-left:auto"><div style="font-size:10px;color:#94a3b8;margin-bottom:4px">Rate vs national avg ('+CT_NAT+')</div><div style="position:relative;height:8px;border-radius:4px;background:#e2e8f0;width:220px"><div style="position:absolute;left:'+Math.round(CT_NAT/CT_MAX*100)+'%;top:-4px;width:2px;height:16px;background:#94a3b8;border-radius:1px"></div><div style="height:100%;border-radius:4px;background:'+gc.bg+';width:'+Math.round(d.homicide/CT_MAX*100)+'%"></div></div></div></div></div>';
+    html+='<tr class="ct-data-row" onclick="ctToggleDetail('+rank+')" style="animation:ctRowIn 0.4s ease '+delay+'s both"><td style="border-left:3px solid '+gc.bg+';color:#94a3b8;font-size:11px;width:44px">'+rank+'</td><td><span style="font-weight:700;color:#0f172a;font-size:13.5px">'+d.province+topBadge+'</span></td><td><span class="ct-grade-b" style="background:'+gc.bg+';color:#fff">'+g+'</span></td><td><div style="font-size:13.5px;font-weight:800;color:#0f172a">'+d.homicide+'</div><div class="ct-bar-wrap"><div class="ct-bar-fill" style="--ctw:'+pct+';animation:ctBarIn 0.75s cubic-bezier(.4,0,.2,1) '+barDelay+'s both;background:'+gc.bar+'"></div></div></td><td style="font-size:11.5px;color:#64748b">'+fmtPop(d.pop)+'</td><td>'+vsNat(d.homicide)+'</td><td>'+trendHtml+'</td></tr><tr><td colspan="7" style="padding:0"><div class="ct-detail-wrap" id="ct-dw-'+rank+'">'+detailHtml+'</div></td></tr>';
+  });
+  var tbody=document.getElementById('ct-tbody');if(tbody)tbody.innerHTML=html;
+  var pgr=document.getElementById('ct-pgr');if(pgr){pgr.innerHTML='';if(totalPages>1){for(var p=1;p<=totalPages;p++){var btn=document.createElement('button');btn.className='ct-pgb'+(p===ctPage?' on':'');btn.textContent=p;btn.setAttribute('data-p',p);btn.onclick=function(){ctGoPage(parseInt(this.getAttribute('data-p'),10));};pgr.appendChild(btn);}}}
+}
+var cgMapBuilt=false;
+function cgGradeColor(v){return v<8?'#22A620':v<18?'#399CD8':v<28?'#F1B72C':v<42?'#EE7728':'#E6201A';}
+function cgGradeLetter(v){return v<8?'A':v<18?'B':v<28?'C':v<42?'D':'F';}
+function cgInitMap(){if(cgMapBuilt)return;var container=document.getElementById('cg-map-container');var loading=document.getElementById('cg-map-loading');var tooltip=document.getElementById('cg-map-tooltip');if(!container)return;fetch('images/canada.svg').then(function(r){return r.text();}).then(function(svgText){var parser=new DOMParser();var doc=parser.parseFromString(svgText,'image/svg+xml');var svgEl=doc.querySelector('svg');svgEl.removeAttribute('width');svgEl.removeAttribute('height');svgEl.style.cssText='width:100%;display:block;border-radius:6px;background:#e8eef6';svgEl.querySelectorAll('path[id^="CA-"]').forEach(function(path){var id=path.getAttribute('id');var prov=EC_PROVINCES[id];var color=prov?cgGradeColor(prov.homicide):'#94a3b8';path.style.fill=color;path.style.fillOpacity='0.85';path.style.stroke='rgba(255,255,255,0.6)';path.style.strokeWidth='0.8';path.style.cursor='pointer';path.addEventListener('mouseover',function(e){path.style.fillOpacity='1';path.style.strokeWidth='2';if(prov&&tooltip){var g=cgGradeLetter(prov.homicide);tooltip.innerHTML='<div style="font-weight:800;color:'+color+';font-size:13px">'+prov.name+'</div><div style="color:#64748b;margin-top:2px">Grade <strong>'+g+'</strong> · <strong>'+prov.homicide+'</strong> homicides/100k</div>';tooltip.style.display='block';}});path.addEventListener('mousemove',function(e){if(tooltip){tooltip.style.left=(e.clientX+14)+'px';tooltip.style.top=(e.clientY-10)+'px';}});path.addEventListener('mouseout',function(){path.style.fillOpacity='0.85';path.style.strokeWidth='0.8';if(tooltip)tooltip.style.display='none';});path.addEventListener('click',function(){if(prov)window.cgSelectProv(prov.name);});});if(loading)loading.style.display='none';container.appendChild(svgEl);cgMapBuilt=true;}).catch(function(){if(loading){loading.innerHTML='Map unavailable';loading.style.display='flex';}});}
+var CG_GC2={A:{bg:'#22A620'},B:{bg:'#399CD8'},C:{bg:'#F1B72C'},D:{bg:'#EE7728'},F:{bg:'#E6201A'}};
+var cgCurGrade='all',cgSelProv=null;
+function cgFmtPop(p){return p>=1e6?(p/1e6).toFixed(1)+'M':(p/1000).toFixed(0)+'K';}
+function cgRenderTabs(){var tabs=document.getElementById('cgpf-tabs');if(!tabs)return;var counts={all:EC_TABLE.length,A:0,B:0,C:0,D:0,F:0};EC_TABLE.forEach(function(d){counts[ctGrade(d.homicide)]++;});var grades=['all','A','B','C','D','F'];var labels={all:'All',A:'Grade A',B:'Grade B',C:'Grade C',D:'Grade D',F:'Grade F'};tabs.innerHTML='';grades.forEach(function(g){var btn=document.createElement('button');var isActive=cgCurGrade===g;btn.className='cgpf-btn'+(isActive?' active':'');var col=g==='all'?'#0a1a4a':(CG_GC2[g]?CG_GC2[g].bg:'#64748b');if(isActive){btn.style.background=col;btn.style.borderColor=col;btn.style.color='#fff';}else{btn.style.background='#fff';btn.style.borderColor='transparent';btn.style.color=col;}btn.innerHTML=labels[g]+' <span style="opacity:.7;font-size:10.5px">('+counts[g]+')</span>';btn.onclick=function(){window.cgFilterGrid(g);};tabs.appendChild(btn);});}
+function cgRenderProvGrid(){var grid=document.getElementById('cg-prov-grid');if(!grid)return;var filtered=cgCurGrade==='all'?EC_TABLE:EC_TABLE.filter(function(d){return ctGrade(d.homicide)===cgCurGrade;});grid.innerHTML='';filtered.forEach(function(d,i){var g=ctGrade(d.homicide);var gc=CG_GC2[g]||CG_GC2.C;var pct=Math.min(100,Math.round(d.homicide/CT_MAX*100));var isSel=cgSelProv===d.province;var card=document.createElement('div');card.className='cg-prov-card'+(isSel?' cgsel':'');card.style.animationDelay=(i*0.03)+'s';if(isSel)card.style.borderColor=gc.bg;card.innerHTML='<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+gc.bg+';border-radius:13px 13px 0 0;opacity:'+(isSel?'1':'.35')+';transition:opacity .2s"></div><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:5px;margin-top:4px"><div style="font-size:11px;font-weight:700;color:#0f172a;line-height:1.3;flex:1;min-width:0;word-break:break-word">'+d.province+'</div><div style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;background:'+gc.bg+'">'+g+'</div></div><div style="font-size:20px;font-weight:900;color:'+gc.bg+';margin-top:8px;line-height:1;letter-spacing:-.02em">'+d.homicide+'<span style="font-size:9.5px;font-weight:500;color:#94a3b8;margin-left:3px">/100k</span></div><div class="cg-card-bar-wrap"><div class="cg-card-bar" style="background:'+gc.bg+'" data-w="'+pct+'%"></div></div><div style="font-size:10px;color:#94a3b8;margin-top:7px;font-weight:500">'+cgFmtPop(d.pop)+' pop.</div>';card.onclick=function(){window.cgSelectProv(d.province);};grid.appendChild(card);});setTimeout(function(){grid.querySelectorAll('.cg-card-bar').forEach(function(b){b.style.width=b.getAttribute('data-w');});},60);}
+window.ctToggleDetail=function(rank){var dw=document.getElementById('ct-dw-'+rank);if(!dw)return;var isOpen=dw.classList.contains('ctopen');document.querySelectorAll('.ct-detail-wrap.ctopen').forEach(function(el){el.classList.remove('ctopen');});if(!isOpen)dw.classList.add('ctopen');};
+window.ctGoPage=function(p){ctPage=p;ctRender();};window.ctRender=ctRender;
+window.cgFilterGrid=function(g){cgCurGrade=g;cgSelProv=null;var badge=document.getElementById('cg-sel-badge');if(badge)badge.style.display='none';var si=document.getElementById('ct-search');if(si){si.value='';if(typeof ctRender==='function')ctRender();}cgRenderTabs();cgRenderProvGrid();};
+window.cgSelectProv=function(name){var wasSel=cgSelProv===name;cgSelProv=wasSel?null:name;var badge=document.getElementById('cg-sel-badge');var selText=document.getElementById('cg-sel-text');if(cgSelProv){if(badge)badge.style.display='flex';if(selText)selText.textContent=cgSelProv;}else{if(badge)badge.style.display='none';}cgRenderProvGrid();var si=document.getElementById('ct-search');if(!cgSelProv){if(si){si.value='';if(typeof ctRender==='function')ctRender();}return;}if(si){si.value=cgSelProv;si.dispatchEvent(new Event('input'));}var sec=document.getElementById('ct-section');if(sec)setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'});},80);setTimeout(function(){if(typeof ctToggleDetail==='function')ctToggleDetail(1);},480);};
+window.cgProvClearSel=function(){cgSelProv=null;var badge=document.getElementById('cg-sel-badge');if(badge)badge.style.display='none';cgRenderProvGrid();var si=document.getElementById('ct-search');if(si){si.value='';if(typeof ctRender==='function')ctRender();}};
+document.addEventListener('DOMContentLoaded',function(){cgInitMap();ctRender();cgRenderTabs();cgRenderProvGrid();var nav=document.querySelector('[data-nav]');window.addEventListener('scroll',function(){nav&&nav.classList.toggle('is-scrolled',window.scrollY>8);});});
+window.ctLangToggle=function(){document.getElementById('ct-lang-menu').classList.toggle('lopen');};window.ctLangSet=function(){document.getElementById('ct-lang-menu').classList.remove('lopen');};document.addEventListener('click',function(e){var m=document.getElementById('ct-lang-menu'),b=document.getElementById('ct-lang-btn');if(m&&b&&!m.contains(e.target)&&!b.contains(e.target))m.classList.remove('lopen');});
+</script>
+</body>
+</html>

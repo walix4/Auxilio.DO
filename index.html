@@ -133,37 +133,32 @@
         </a>
 
         <!-- Desktop nav -->
-        <ul class="hidden lg:flex flex-1 items-center justify-center gap-5 xl:gap-6 text-sm font-medium text-white/80 whitespace-nowrap">
-            <li><span class="text-white font-semibold">Home</span></li>
-            <li><span class="w-20 h-3 rounded bg-white/20 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-white/20 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-white/20 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-white/20 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-white/20 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-white/20 inline-block"></span></li>
+        <ul class="hidden lg:flex flex-1 items-center justify-center gap-1 xl:gap-1.5 text-sm font-medium text-white/80 whitespace-nowrap">
+            <li><a href="index.html" style="background:rgba(255,255,255,.15)" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-white font-bold text-xs">🇩🇴 Dom. Republic</a></li>
+            <li><a href="el-salvador.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇸🇻 El Salvador</a></li>
+            <li><a href="mexico.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇲🇽 Mexico</a></li>
+            <li><a href="ecuador.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇪🇨 Ecuador</a></li>
+            <li><a href="peru.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇵🇪 Peru</a></li>
+            <li><a href="canada.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇨🇦 Canada</a></li>
         </ul>
 
-        <!-- Buttons placeholder -->
-        <div class="ml-auto lg:ml-6 flex items-center gap-2.5 lg:border-l lg:border-white/20 lg:pl-6">
-            <span class="w-16 h-9 rounded-lg bg-white/20 inline-block"></span>
-            <span class="w-24 h-9 rounded-lg bg-white/20 inline-block"></span>
-        </div>
+        <!-- Mobile menu button -->
+        <button id="mobile-menu-btn" class="ml-auto lg:hidden flex flex-col gap-1.5 p-2" onclick="document.getElementById('mobile-menu').classList.toggle('is-open')" aria-label="Menu">
+            <span class="block w-5 h-0.5 bg-white"></span>
+            <span class="block w-5 h-0.5 bg-white"></span>
+            <span class="block w-5 h-0.5 bg-white"></span>
+        </button>
     </nav>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" data-menu-panel class="lg:hidden absolute inset-x-4 top-[72px] rounded-md bg-white border border-slate-100 shadow-xl p-6">
-        <ul class="flex flex-col gap-4 text-base font-medium text-slate-800">
-            <li><span class="font-bold text-slate-800">Home</span></li>
-            <li><span class="w-20 h-3 rounded bg-slate-200 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-slate-200 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-slate-200 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-slate-200 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-slate-200 inline-block"></span></li>
-            <li><span class="w-20 h-3 rounded bg-slate-200 inline-block"></span></li>
-            <li class="pt-2 flex flex-col gap-2">
-                <span class="w-full h-10 rounded-lg bg-slate-200 inline-block"></span>
-                <span class="w-full h-10 rounded-lg bg-slate-200 inline-block"></span>
-            </li>
+    <div id="mobile-menu" data-menu-panel class="lg:hidden absolute inset-x-4 top-[72px] rounded-xl bg-white border border-slate-100 shadow-xl p-5">
+        <ul class="flex flex-col gap-1 text-sm font-medium">
+            <li><a href="index.html" class="flex items-center gap-2 font-bold text-blue-900 bg-blue-50 rounded-lg px-3 py-2.5">🇩🇴 Dominican Republic <span class="ml-auto text-xs text-blue-400 font-normal">Active</span></a></li>
+            <li><a href="el-salvador.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇸🇻 El Salvador</a></li>
+            <li><a href="mexico.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇲🇽 Mexico</a></li>
+            <li><a href="ecuador.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇪🇨 Ecuador</a></li>
+            <li><a href="peru.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇵🇪 Peru</a></li>
+            <li><a href="canada.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇨🇦 Canada</a></li>
         </ul>
     </div>
 </header>
