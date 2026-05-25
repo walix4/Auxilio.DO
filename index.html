@@ -369,8 +369,8 @@
 </div>
 
 <!-- ── MAIN SECTION ── -->
-<section id="cg-main-section" class="min-h-screen" style="background:#f8fafc">
-    <div class="mx-auto max-w-7xl px-5 sm:px-8 py-10">
+<section id="cg-main-section" style="background:#f8fafc">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 py-6">
 
         <!-- STATE GRID VIEW (default) -->
         <div id="cg-states-view">
@@ -401,71 +401,91 @@
 </section>
 
 <!-- ── CITY TABLE SECTION ── -->
-<section style="background:#f8fafc;padding:40px 0 60px">
+<style>
+#ct-section{background:#0b1120;color:#e2e8f0}
+.ct-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#e2e8f0;font-size:13px;padding:9px 13px 9px 36px;width:100%;max-width:340px;outline:none}
+.ct-input::placeholder{color:#64748b}
+.ct-sel{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#cbd5e1;font-size:12.5px;padding:9px 14px;cursor:pointer;outline:none;white-space:nowrap}
+.ct-sel option{background:#1e293b;color:#e2e8f0}
+.ct-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.ct-tbl thead th{padding:10px 14px;text-align:left;font-size:10px;font-weight:600;color:#64748b;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;background:#0d1526;border-bottom:1px solid rgba(255,255,255,.07)}
+.ct-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.05);transition:background .1s}
+.ct-tbl tbody tr:hover{background:rgba(255,255,255,.05)}
+.ct-tbl tbody tr.ct-nat{background:rgba(255,255,255,.04);font-style:italic}
+.ct-tbl td{padding:9px 14px;vertical-align:middle}
+.ct-bar-wrap{height:3px;border-radius:2px;margin-top:4px;background:rgba(255,255,255,.1);min-width:60px}
+.ct-bar-fill{height:100%;border-radius:2px}
+.ct-pgb{padding:5px 11px;border:1px solid rgba(255,255,255,.12);border-radius:7px;font-size:12px;cursor:pointer;background:rgba(255,255,255,.06);color:#cbd5e1}
+.ct-pgb.on{background:#22A620;color:#fff;border-color:#22A620}
+.ct-badge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;border:1px solid}
+</style>
+<section id="ct-section" style="padding:36px 0 60px">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
 
     <!-- Header -->
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px">
       <div>
-        <div style="font-size:15px;font-weight:600;color:#0f172a">🇺🇸 Crime Grade · US — By City · 2024</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:3px">Violent crime /100k · FBI UCR 2024 · 120+ major cities</div>
+        <div style="font-size:16px;font-weight:600;color:#f1f5f9">🇺🇸 Crime Grade · US — By City · 2024</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px">Violent crime /100k · FBI UCR · NIBRS · 120+ major US cities</div>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start">
-        <span style="font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;background:#e8f5e9;color:#1b5e20">FBI UCR</span>
-        <span style="font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;background:#e3f2fd;color:#0d47a1" id="ct-badge-count">120+ cities</span>
-        <span style="font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;background:#fffde7;color:#b45309">2024 Final</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <span class="ct-badge" style="background:rgba(34,166,32,.12);color:#4ade80;border-color:rgba(34,166,32,.35)">FBI UCR</span>
+        <span class="ct-badge" style="background:rgba(57,156,216,.12);color:#60c8f8;border-color:rgba(57,156,216,.35)">120+ cities</span>
+        <span class="ct-badge" style="background:rgba(241,183,44,.12);color:#fbbf24;border-color:rgba(241,183,44,.35)">✦ 2024 Final</span>
+        <span class="ct-badge" style="background:rgba(230,32,26,.12);color:#f87171;border-color:rgba(230,32,26,.35)">⚠ Violent crime data</span>
       </div>
     </div>
 
     <!-- National strip -->
-    <div style="background:#fff;border-radius:10px;padding:11px 16px;margin-bottom:16px;font-size:12px;color:#475569;line-height:1.8;border:1px solid rgba(0,0,0,.07);box-shadow:0 1px 4px rgba(0,0,0,.04)">
-      <strong style="color:#0f172a">National avg violent crime /100k:</strong>
-      <span style="margin:0 10px">2022: <strong>380</strong></span>
-      <span style="margin:0 10px">2023: <strong>364</strong> <span style="color:#22A620;font-weight:500">↓</span></span>
-      <span style="margin:0 10px">2024: <strong>~345</strong> <span style="color:#22A620;font-weight:500">↓ est.</span></span>
-      &nbsp;·&nbsp; Safest: <strong>Carmel, IN</strong> (66/100k) &nbsp;·&nbsp; Most dangerous: <strong>Memphis, TN</strong> (2,501/100k)
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 16px;margin-bottom:14px;font-size:12px;color:#94a3b8;line-height:1.8">
+      <strong style="color:#e2e8f0;font-weight:500">National avg violent crime /100k:</strong>
+      <span style="margin:0 8px">2022: <strong style="color:#f1f5f9">380</strong></span>
+      <span style="margin:0 8px">2023: <strong style="color:#f1f5f9">364</strong> <span style="color:#4ade80;font-weight:600">↓</span></span>
+      <span style="margin:0 8px">2024: <strong style="color:#f1f5f9">~345</strong> <span style="color:#4ade80;font-weight:600">↓ est.</span></span>
+      &nbsp;·&nbsp; Safest: <strong style="color:#f1f5f9">Carmel, IN</strong> (66/100k)
+      &nbsp;·&nbsp; Most dangerous: <strong style="color:#f87171">Memphis, TN</strong> (2,501/100k)
     </div>
 
     <!-- Meta cards -->
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
-      <div style="background:#fff;border-radius:10px;padding:12px 16px;flex:1;min-width:88px;border:1px solid rgba(0,0,0,.07);box-shadow:0 1px 4px rgba(0,0,0,.04)">
-        <div id="ct-total" style="font-size:20px;font-weight:700;color:#0f172a">—</div>
-        <div style="font-size:10px;color:#94a3b8;margin-top:2px">Cities ranked</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;flex:1;min-width:88px">
+        <div id="ct-total" style="font-size:20px;font-weight:700;color:#f1f5f9">—</div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px;line-height:1.4">Cities in<br>the ranking</div>
       </div>
-      <div style="background:#fff;border-radius:10px;padding:12px 16px;flex:1;min-width:88px;border:1px solid rgba(0,0,0,.07);box-shadow:0 1px 4px rgba(0,0,0,.04)">
-        <div style="font-size:20px;font-weight:700;color:#22A620">66</div>
-        <div style="font-size:10px;color:#94a3b8;margin-top:2px;line-height:1.4">Safest: Carmel, IN<br>violent /100k</div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;flex:1;min-width:88px">
+        <div style="font-size:20px;font-weight:700;color:#4ade80">66</div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px;line-height:1.4">Min: Carmel, IN<br>/100k 2024</div>
       </div>
-      <div style="background:#fff;border-radius:10px;padding:12px 16px;flex:1;min-width:88px;border:1px solid rgba(0,0,0,.07);box-shadow:0 1px 4px rgba(0,0,0,.04)">
-        <div style="font-size:20px;font-weight:700;color:#E6201A">2,501</div>
-        <div style="font-size:10px;color:#94a3b8;margin-top:2px;line-height:1.4">Memphis, TN<br>#1 most dangerous</div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;flex:1;min-width:88px">
+        <div style="font-size:20px;font-weight:700;color:#f87171">2,501</div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px;line-height:1.4">Max: Memphis<br>/100k 2024</div>
       </div>
-      <div style="background:#fff;border-radius:10px;padding:12px 16px;flex:1;min-width:88px;border:1px solid rgba(0,0,0,.07);box-shadow:0 1px 4px rgba(0,0,0,.04)">
-        <div style="font-size:20px;font-weight:700;color:#E6201A">48.2</div>
-        <div style="font-size:10px;color:#94a3b8;margin-top:2px;line-height:1.4">Jackson, MS<br>murder /100k</div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;flex:1;min-width:88px">
+        <div style="font-size:20px;font-weight:700;color:#f87171">48.2</div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px;line-height:1.4">Jackson, MS<br>#1 murder /100k</div>
       </div>
-      <div style="background:#fff;border-radius:10px;padding:12px 16px;flex:1;min-width:88px;border:1px solid rgba(0,0,0,.07);box-shadow:0 1px 4px rgba(0,0,0,.04)">
-        <div style="font-size:20px;font-weight:700;color:#22A620">−5%</div>
-        <div style="font-size:10px;color:#94a3b8;margin-top:2px;line-height:1.4">Violent crime<br>trend 2024</div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;flex:1;min-width:88px">
+        <div style="font-size:20px;font-weight:700;color:#4ade80">−5%</div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px;line-height:1.4">National reduction<br>2023→2024</div>
       </div>
     </div>
 
     <!-- Grade legend -->
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#475569"><div style="width:22px;height:22px;border-radius:5px;background:#e8f5e9;color:#1b5e20;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">A</div>Very safe (&lt;200)</div>
-      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#475569"><div style="width:22px;height:22px;border-radius:5px;background:#e3f2fd;color:#0d47a1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">B</div>Safe (200–400)</div>
-      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#475569"><div style="width:22px;height:22px;border-radius:5px;background:#fffde7;color:#b45309;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">C</div>Moderate (400–700)</div>
-      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#475569"><div style="width:22px;height:22px;border-radius:5px;background:#fff3e0;color:#c2410c;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">D</div>High crime (700–1,200)</div>
-      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#475569"><div style="width:22px;height:22px;border-radius:5px;background:#fce4ec;color:#991b1b;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">F</div>Dangerous (1,200+)</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#94a3b8"><div style="width:22px;height:22px;border-radius:5px;background:rgba(34,166,32,.2);color:#4ade80;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">A</div>Very safe (&lt;200)</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#94a3b8"><div style="width:22px;height:22px;border-radius:5px;background:rgba(57,156,216,.2);color:#60c8f8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">B</div>Safe (200–400)</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#94a3b8"><div style="width:22px;height:22px;border-radius:5px;background:rgba(241,183,44,.2);color:#fbbf24;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">C</div>Moderate (400–700)</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#94a3b8"><div style="width:22px;height:22px;border-radius:5px;background:rgba(238,119,40,.2);color:#fb923c;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">D</div>High crime (700–1,200)</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#94a3b8"><div style="width:22px;height:22px;border-radius:5px;background:rgba(230,32,26,.2);color:#f87171;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">F</div>Dangerous (1,200+)</div>
     </div>
 
     <!-- Controls -->
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center">
-      <div style="position:relative">
-        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;pointer-events:none;color:#94a3b8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
-        <input id="ct-search" style="padding:7px 12px 7px 32px;border:1px solid rgba(0,0,0,.1);border-radius:8px;font-size:12.5px;background:#fff;color:#0f172a;width:220px;outline:none;box-shadow:0 1px 3px rgba(0,0,0,.04)" placeholder="Search city or state…" oninput="ctGoPage(1)"/>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+      <div style="position:relative;flex:1;max-width:340px">
+        <svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%);width:13px;height:13px;pointer-events:none;color:#64748b" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+        <input id="ct-search" class="ct-input" placeholder="🔍 Search city or state…" oninput="ctGoPage(1)"/>
       </div>
-      <select id="ct-grade-f" style="padding:7px 11px;border:1px solid rgba(0,0,0,.1);border-radius:8px;font-size:12px;background:#fff;color:#475569;cursor:pointer;outline:none;box-shadow:0 1px 3px rgba(0,0,0,.04)" onchange="ctGoPage(1)">
+      <select id="ct-grade-f" class="ct-sel" onchange="ctGoPage(1)">
         <option value="">All grades</option>
         <option value="A">A — Very safe</option>
         <option value="B">B — Safe</option>
@@ -473,32 +493,33 @@
         <option value="D">D — High crime</option>
         <option value="F">F — Dangerous</option>
       </select>
-      <select id="ct-sort" style="padding:7px 11px;border:1px solid rgba(0,0,0,.1);border-radius:8px;font-size:12px;background:#fff;color:#475569;cursor:pointer;outline:none;box-shadow:0 1px 3px rgba(0,0,0,.04)" onchange="ctGoPage(1)">
-        <option value="violent">Sort: Violent ↑</option>
-        <option value="murder">Sort: Murder ↑</option>
-        <option value="property">Sort: Property ↑</option>
-        <option value="pop_desc">Sort: Population ↓</option>
-        <option value="city">Sort: City A–Z</option>
+      <select id="ct-sort" class="ct-sel" onchange="ctGoPage(1)">
+        <option value="violent">Violent crime ↑</option>
+        <option value="murder">Murder rate ↑</option>
+        <option value="property">Property crime ↑</option>
+        <option value="pop_desc">Population ↓</option>
+        <option value="city">City A–Z</option>
       </select>
-      <span id="ct-count" style="margin-left:auto;font-size:11.5px;color:#94a3b8;font-weight:500"></span>
+      <span id="ct-count" style="margin-left:auto;font-size:11.5px;color:#64748b;font-weight:500;white-space:nowrap"></span>
     </div>
 
     <!-- Table -->
-    <div style="overflow-x:auto;border-radius:12px;border:1px solid rgba(0,0,0,.08);box-shadow:0 2px 14px rgba(0,0,0,.06)">
-      <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+    <div style="overflow-x:auto;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#0d1526">
+      <table class="ct-tbl">
         <thead>
-          <tr style="background:#f8fafc;border-bottom:1px solid rgba(0,0,0,.08)">
-            <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">#</th>
-            <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">City</th>
-            <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">Grade</th>
-            <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">Violent /100k</th>
-            <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">Murder /100k</th>
-            <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">Property /100k</th>
-            <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">Population</th>
-            <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">Trend</th>
+          <tr>
+            <th># ↑</th>
+            <th>City</th>
+            <th>Grade</th>
+            <th>Violent /100k</th>
+            <th>Murder /100k</th>
+            <th>Property /100k</th>
+            <th>Population</th>
+            <th>vs National</th>
+            <th>Trend</th>
           </tr>
         </thead>
-        <tbody id="ct-tbody" style="background:#fff"></tbody>
+        <tbody id="ct-tbody"></tbody>
       </table>
     </div>
 
@@ -506,8 +527,8 @@
     <div id="ct-pgr" style="display:flex;align-items:center;gap:6px;margin-top:14px;flex-wrap:wrap"></div>
 
     <!-- Source note -->
-    <p style="margin-top:22px;font-size:10.5px;color:#94a3b8;line-height:1.65;padding-top:14px;border-top:1px solid rgba(0,0,0,.06)">
-      <strong style="color:#64748b">Source:</strong> FBI Uniform Crime Reporting (UCR) Program, 2024 — final annual data released August 2025. Violent crime includes murder, non-negligent manslaughter, rape, robbery, and aggravated assault per 100,000 residents. Property crime includes burglary, larceny-theft, and motor vehicle theft. Grade thresholds: A &lt;200, B 200–400, C 400–700, D 700–1,200, F ≥1,200 violent /100k.
+    <p style="margin-top:20px;font-size:10.5px;color:#475569;line-height:1.65;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
+      <strong style="color:#64748b">Sources:</strong> FBI Uniform Crime Reporting (UCR) Program &amp; NIBRS, 2024 — final annual data released August 2025. Covers 120+ major US cities. Violent crime includes murder, non-negligent manslaughter, rape, robbery, and aggravated assault per 100,000 residents. Grades: A &lt;200, B 200–400, C 400–700, D 700–1,200, F ≥1,200 violent /100k. The FBI advises against using these rankings for policy decisions; data is for public awareness only.
     </p>
 
   </div>
@@ -1107,9 +1128,8 @@ window.cgAnalyze=cgAnalyze;
 document.addEventListener('DOMContentLoaded', function(){
   cgPage=1;
   cgSelectedState='';
-  cgRenderStates();
-  document.getElementById('cg-states-view').style.display='block';
-  document.getElementById('cg-cities-view').style.display='none';
+  var sv=document.getElementById('cg-states-view');if(sv)sv.style.display='block';
+  var cv=document.getElementById('cg-cities-view');if(cv)cv.style.display='none';
   var ap=document.getElementById('cg-ai-panel');if(ap)ap.classList.remove('cg-show');
   window.scrollTo(0,0);
   /* Build the interactive US map */
@@ -1122,15 +1142,15 @@ document.addEventListener('DOMContentLoaded', function(){
 <script>
 (function(){
   var CT_GC={
-    A:{bg:'#e8f5e9',tx:'#1b5e20'},
-    B:{bg:'#e3f2fd',tx:'#0d47a1'},
-    C:{bg:'#fffde7',tx:'#b45309'},
-    D:{bg:'#fff3e0',tx:'#c2410c'},
-    F:{bg:'#fce4ec',tx:'#991b1b'}
+    A:{bg:'rgba(34,166,32,.18)',tx:'#4ade80',bar:'#22A620'},
+    B:{bg:'rgba(57,156,216,.18)',tx:'#60c8f8',bar:'#399CD8'},
+    C:{bg:'rgba(241,183,44,.18)',tx:'#fbbf24',bar:'#F1B72C'},
+    D:{bg:'rgba(238,119,40,.18)',tx:'#fb923c',bar:'#EE7728'},
+    F:{bg:'rgba(230,32,26,.18)',tx:'#f87171',bar:'#E6201A'}
   };
-  var CT_BAR={A:'#22A620',B:'#399CD8',C:'#F1B72C',D:'#EE7728',F:'#E6201A'};
   var CT_MAX=2501;
   var CT_PER=20;
+  var CT_NAT=345; // national avg violent /100k 2024
   var ctPage=1;
 
   function ctGrade(v){
@@ -1139,6 +1159,12 @@ document.addEventListener('DOMContentLoaded', function(){
   function fmtPop(p){
     return p>=1e6?(p/1e6).toFixed(1)+'M':(p/1000).toFixed(0)+'K';
   }
+  function vsNat(v){
+    var diff=v-CT_NAT;
+    if(diff<0)return'<span style="color:#4ade80;font-size:11px;font-weight:600">↓ −'+(Math.abs(diff))+'</span>';
+    return'<span style="color:#f87171;font-size:11px;font-weight:600">↑ +'+(diff)+'</span>';
+  }
+
   function ctFiltered(){
     var q=(document.getElementById('ct-search').value||'').toLowerCase();
     var gf=document.getElementById('ct-grade-f').value;
@@ -1169,65 +1195,69 @@ document.addEventListener('DOMContentLoaded', function(){
     var countEl=document.getElementById('ct-count');
     if(countEl)countEl.textContent=total+' cities';
 
+    // National avg row
+    var natGc=CT_GC[ctGrade(CT_NAT)];
+    var natPct=Math.round(CT_NAT/CT_MAX*100);
+    var natRow='<tr class="ct-nat">'+
+      '<td style="color:#64748b;font-size:11px">—</td>'+
+      '<td><span style="font-weight:600;color:#cbd5e1;font-size:13px">🇺🇸 US National avg</span><br><span style="font-size:10px;color:#64748b;font-style:normal">All cities · 2024</span></td>'+
+      '<td><span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;font-size:13px;font-weight:700;background:'+natGc.bg+';color:'+natGc.tx+'">'+ctGrade(CT_NAT)+'</span></td>'+
+      '<td><div style="font-size:12.5px;font-weight:600;color:#cbd5e1">~'+CT_NAT+'</div>'+
+        '<div class="ct-bar-wrap"><div class="ct-bar-fill" style="width:'+natPct+'%;background:'+natGc.bar+'"></div></div></td>'+
+      '<td style="color:#94a3b8;font-size:12px">~6.0</td>'+
+      '<td style="color:#94a3b8;font-size:12px">~2,100</td>'+
+      '<td style="color:#64748b;font-size:11px">335M</td>'+
+      '<td>—</td>'+
+      '<td>—</td>'+
+    '</tr>';
+
     var html='';
     slice.forEach(function(d,i){
       var rank=(ctPage-1)*CT_PER+i+1;
       var g=ctGrade(d.violent);
       var gc=CT_GC[g];
-      var bar=CT_BAR[g];
       var pct=Math.min(Math.round(d.violent/CT_MAX*100),100);
-      var topBadge=rank<=3?'<span style="font-size:9px;background:#e8f5e9;color:#1b5e20;padding:1px 5px;border-radius:6px;margin-left:4px">#'+rank+'</span>':'';
-      var trendHtml=d.trend==='dn'?'<span style="color:#22A620;font-size:13px;font-weight:700">↓</span>':d.trend==='up'?'<span style="color:#E6201A;font-size:13px;font-weight:700">↑</span>':'<span style="color:#94a3b8;font-size:13px">→</span>';
-      var rowBg=rank%2===0?'#f9fafb':'#fff';
-      html+='<tr class="ct-row" data-bg="'+rowBg+'" style="background:'+rowBg+';border-bottom:1px solid rgba(0,0,0,.05)">'+
-        '<td style="padding:9px 12px;color:#94a3b8;font-size:11px">'+rank+'</td>'+
-        '<td style="padding:9px 12px">'+
-          '<span style="font-weight:600;color:#0f172a;font-size:13px">'+d.city+topBadge+'</span>'+
-          '<span style="font-size:10px;color:#94a3b8;margin-left:5px">'+d.state+'</span>'+
+      var topBadge=rank<=3?'<span style="font-size:9px;background:rgba(34,166,32,.2);color:#4ade80;padding:1px 5px;border-radius:6px;margin-left:5px">#'+rank+'</span>':'';
+      var trendHtml=d.trend==='dn'?'<span style="color:#4ade80;font-size:13px;font-weight:700">↓</span>':d.trend==='up'?'<span style="color:#f87171;font-size:13px;font-weight:700">↑</span>':'<span style="color:#64748b;font-size:13px">→</span>';
+      html+='<tr>'+
+        '<td style="color:#64748b;font-size:11px">'+rank+'</td>'+
+        '<td>'+
+          '<span style="font-weight:600;color:#f1f5f9;font-size:13px">'+d.city+topBadge+'</span>'+
+          '<span style="font-size:10px;color:#64748b;margin-left:5px">'+d.state+'</span>'+
         '</td>'+
-        '<td style="padding:9px 12px">'+
+        '<td>'+
           '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;font-size:13px;font-weight:700;background:'+gc.bg+';color:'+gc.tx+'">'+g+'</span>'+
         '</td>'+
-        '<td style="padding:9px 12px">'+
-          '<div style="font-size:12.5px;font-weight:600;color:#0f172a">'+d.violent+'</div>'+
-          '<div style="height:3px;border-radius:2px;margin-top:4px;background:rgba(0,0,0,.07);min-width:60px">'+
-            '<div style="height:100%;border-radius:2px;width:'+pct+'%;background:'+bar+'"></div>'+
-          '</div>'+
+        '<td>'+
+          '<div style="font-size:12.5px;font-weight:600;color:#f1f5f9">'+d.violent+'</div>'+
+          '<div class="ct-bar-wrap"><div class="ct-bar-fill" style="width:'+pct+'%;background:'+gc.bar+'"></div></div>'+
         '</td>'+
-        '<td style="padding:9px 12px;font-size:12px;color:#475569">'+d.murder+'</td>'+
-        '<td style="padding:9px 12px;font-size:12px;color:#475569">'+d.property.toLocaleString()+'</td>'+
-        '<td style="padding:9px 12px;font-size:11px;color:#94a3b8">'+fmtPop(d.pop)+'</td>'+
-        '<td style="padding:9px 12px">'+trendHtml+'</td>'+
+        '<td style="font-size:12px;color:#94a3b8">'+d.murder+'</td>'+
+        '<td style="font-size:12px;color:#94a3b8">'+d.property.toLocaleString()+'</td>'+
+        '<td style="font-size:11px;color:#64748b">'+fmtPop(d.pop)+'</td>'+
+        '<td>'+vsNat(d.violent)+'</td>'+
+        '<td>'+trendHtml+'</td>'+
       '</tr>';
     });
 
     var tbody=document.getElementById('ct-tbody');
-    if(tbody){
-      tbody.innerHTML=html;
-      tbody.querySelectorAll('.ct-row').forEach(function(tr){
-        var bg=tr.dataset.bg;
-        tr.addEventListener('mouseover',function(){tr.style.background='#f1f5f9';});
-        tr.addEventListener('mouseout',function(){tr.style.background=bg;});
-      });
-    }
+    if(tbody)tbody.innerHTML=natRow+html;
 
-    var pgHtml='<span style="font-size:11.5px;color:#94a3b8">'+
-      Math.min((ctPage-1)*CT_PER+1,total)+'–'+Math.min(ctPage*CT_PER,total)+' of '+total+' cities</span>';
+    var pgHtml='<span style="font-size:11.5px;color:#64748b">'+
+      Math.min((ctPage-1)*CT_PER+1,total)+'–'+Math.min(ctPage*CT_PER,total)+' of '+total+'</span>';
     if(pages>1){
-      if(ctPage>1)pgHtml+='<button onclick="ctGoPage('+(ctPage-1)+')" style="padding:5px 11px;border:1px solid rgba(0,0,0,.1);border-radius:7px;font-size:12px;cursor:pointer;background:#fff;color:#475569">← Prev</button>';
+      if(ctPage>1)pgHtml+='<button class="ct-pgb" onclick="ctGoPage('+(ctPage-1)+')">← Prev</button>';
       var s=Math.max(1,ctPage-2),e=Math.min(pages,ctPage+2);
       for(var i=s;i<=e;i++){
-        var ap=i===ctPage?'background:#22A620;color:#fff;border-color:#22A620':'background:#fff;color:#475569;border-color:rgba(0,0,0,.1)';
-        pgHtml+='<button onclick="ctGoPage('+i+')" style="padding:5px 11px;border:1px solid;border-radius:7px;font-size:12px;cursor:pointer;'+ap+'">'+i+'</button>';
+        pgHtml+='<button class="ct-pgb'+(i===ctPage?' on':'')+'" onclick="ctGoPage('+i+')">'+i+'</button>';
       }
-      if(ctPage<pages)pgHtml+='<button onclick="ctGoPage('+(ctPage+1)+')" style="padding:5px 11px;border:1px solid rgba(0,0,0,.1);border-radius:7px;font-size:12px;cursor:pointer;background:#fff;color:#475569">Next →</button>';
+      if(ctPage<pages)pgHtml+='<button class="ct-pgb" onclick="ctGoPage('+(ctPage+1)+')">Next →</button>';
     }
     var pgr=document.getElementById('ct-pgr');
     if(pgr)pgr.innerHTML=pgHtml;
   }
 
   window.ctGoPage=function(p){ctPage=p;ctRender();};
-
   document.addEventListener('DOMContentLoaded',function(){ctRender();});
 })();
 </script>
