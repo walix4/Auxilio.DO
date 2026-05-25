@@ -427,14 +427,15 @@
 .cg-prov-card.cgsel{box-shadow:0 16px 36px -10px rgba(15,23,42,.28);transform:translateY(-4px);border-color:var(--cgc)}
 .cg-prov-card .cg-tint{position:absolute;inset:0;background:linear-gradient(180deg,var(--cgct) 0%,transparent 55%);pointer-events:none;opacity:.7;transition:opacity .22s}
 .cg-prov-card:hover .cg-tint,.cg-prov-card.cgsel .cg-tint{opacity:1}
-.cg-prov-card .cg-strip{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--cgc),var(--cgc2,var(--cgc)));border-radius:16px 16px 0 0}
+.cg-prov-card .cg-strip{display:none}
 .cg-prov-card .cg-rank{font-size:9px;letter-spacing:.16em;color:#94a3b8;font-weight:800;text-transform:uppercase;margin-bottom:4px}
 .cg-prov-card .cg-name{font-size:12.5px;font-weight:800;color:#0f172a;line-height:1.25;word-break:break-word}
 .cg-prov-card .cg-chip{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;background:var(--cgc);box-shadow:0 4px 10px -2px var(--cgcs,rgba(0,0,0,.18))}
 .cg-prov-card .cg-num{font-size:30px;font-weight:900;color:var(--cgc);line-height:1;letter-spacing:-.025em}
 .cg-prov-card .cg-unit{font-size:9.5px;font-weight:600;color:#94a3b8;margin-left:4px;letter-spacing:.04em}
 .cg-prov-card .cg-trend{display:inline-flex;align-items:center;gap:2px;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;line-height:1}
-.cg-card-bar-wrap{height:5px;border-radius:3px;background:#eef2f6;margin-top:12px;overflow:hidden;position:relative}
+.cg-card-bar-wrap{height:5px;border-radius:3px;background:#eef2f6;margin-top:12px;overflow:hidden;position:relative;z-index:1}
+.cg-prov-card .cg-foot{position:relative;z-index:1}
 .cg-card-bar{height:100%;border-radius:3px;width:0;background:linear-gradient(90deg,var(--cgc),var(--cgc2,var(--cgc)));transition:width 1s cubic-bezier(.4,0,.2,1);box-shadow:0 0 0 1px rgba(0,0,0,.02) inset}
 .cg-prov-card .cg-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:11px;font-size:10px;color:#64748b;font-weight:600}
 .cg-prov-card .cg-pop{display:inline-flex;align-items:center;gap:4px;color:#64748b}
