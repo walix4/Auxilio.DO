@@ -318,6 +318,7 @@ function cgInitMap(){
       var parser=new DOMParser();
       var doc=parser.parseFromString(svgText,'image/svg+xml');
       var svgEl=doc.querySelector('svg');
+      if(!svgEl.getAttribute('viewBox')){var _w=parseFloat(svgEl.getAttribute('width'))||792,_h=parseFloat(svgEl.getAttribute('height'))||500;svgEl.setAttribute('viewBox','0 0 '+_w+' '+_h);}
       svgEl.removeAttribute('width');svgEl.removeAttribute('height');
       svgEl.style.cssText='width:100%;display:block;border-radius:6px;background:#e8eef6';
       var paths=svgEl.querySelectorAll('path[id^="SV-"]');
