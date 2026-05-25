@@ -417,12 +417,16 @@
 
 <!-- ── PROVINCE CARD GRID ── -->
 <section id="cg-prov-section">
-  <div style="max-width:1400px;margin:0 auto;padding:0 24px">
+  <div style="max-width:1400px;margin:0 auto;padding:0 24px;position:relative;z-index:1">
     <!-- header row -->
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
-      <div>
-        <div style="font-size:14px;font-weight:800;color:#0f172a;letter-spacing:-.01em">🗺️ Explore All 32 Provinces</div>
-        <div style="font-size:11px;color:#64748b;margin-top:3px">Click a province card to filter the table below</div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#0a1a4a,#1d4ed8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 8px 20px -8px rgba(10,26,74,.55);flex-shrink:0">🗺️</div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:6px;font-size:9.5px;font-weight:800;color:#1d4ed8;background:rgba(29,78,216,.12);padding:3px 9px;border-radius:20px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px">Step 1 · Quick glance</div>
+          <div style="font-size:19px;font-weight:900;color:#0a1a4a;letter-spacing:-.02em;line-height:1.15">Explore All 32 Provinces</div>
+          <div style="font-size:11.5px;color:#475569;margin-top:3px">Click a province card to filter the detailed table below</div>
+        </div>
       </div>
       <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
         <div id="cgpf-tabs" style="display:flex;gap:5px;flex-wrap:wrap"></div>
@@ -436,11 +440,16 @@
     <!-- card grid -->
     <div id="cg-prov-grid" class="cg-prov-grid"></div>
   </div>
+  <!-- curved divider -->
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="display:block;width:100%;height:48px;margin-top:36px;margin-bottom:-1px"><path d="M0,60 C360,0 1080,0 1440,60 L1440,60 L0,60 Z" fill="#f5f7fb"/></svg>
 </section>
 
 <!-- ── PROVINCE TABLE SECTION ── -->
 <style>
-#ct-section{background:#f1f5f9}
+#ct-section{background:linear-gradient(180deg,#f5f7fb 0%,#eef2f8 60%,#e8edf5 100%)}
+.ct-shell{background:#fff;border:1px solid rgba(15,23,42,.06);border-radius:22px;box-shadow:0 14px 40px -18px rgba(15,23,42,.18),0 2px 8px rgba(15,23,42,.04);padding:28px 28px 30px;position:relative;overflow:hidden}
+.ct-shell::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#22A620 0%,#399CD8 25%,#F1B72C 50%,#EE7728 75%,#E6201A 100%)}
+@media(max-width:640px){.ct-shell{padding:22px 18px 24px;border-radius:18px}}
 @keyframes ctBarIn{from{width:0}to{width:var(--ctw,0%)}}
 @keyframes ctRowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes ctPanelIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
@@ -494,14 +503,19 @@
 .ct-lang-opt:hover{background:#f1f5f9}
 .ct-lang-opt.active{background:#f0f7ff;color:#1d4ed8;font-weight:600}
 </style>
-<section id="ct-section" style="padding:36px 0 60px">
+<section id="ct-section" style="padding:8px 0 64px">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
+   <div class="ct-shell">
 
     <!-- Header -->
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px">
-      <div>
-        <div class="ct-title" style="font-size:16px;font-weight:600;color:#0f172a">🇩🇴 Crime Grade · Dominican Republic — By Province · 2023</div>
-        <div class="ct-sub" style="font-size:11px;color:#94a3b8;margin-top:4px">Homicide /100k · Policía Nacional · 32 provinces</div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:20px;padding-top:6px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 8px 20px -8px rgba(220,38,38,.55);flex-shrink:0">📊</div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:6px;font-size:9.5px;font-weight:800;color:#b91c1c;background:#fee2e2;padding:3px 9px;border-radius:20px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px">Step 2 · Detailed rankings</div>
+          <div class="ct-title" style="font-size:18px;font-weight:900;color:#0a1a4a;letter-spacing:-.02em;line-height:1.15">Crime Grade · By Province · 2023</div>
+          <div class="ct-sub" style="font-size:11.5px;color:#475569;margin-top:3px">Homicide rate per 100,000 residents · Policía Nacional · 32 provinces</div>
+        </div>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
         <span class="ct-badge" style="background:#dcfce7;color:#15803d">Policía Nacional</span>
@@ -608,6 +622,7 @@
       <strong style="color:#64748b">Sources:</strong> Policía Nacional de la República Dominicana &amp; Ministerio de Interior y Policía — 2023 estimates. Covers all 32 provinces. Homicide rate per 100,000 residents. Grades: A &lt;8, B 8–18, C 18–28, D 28–42, F ≥42 homicides/100k. Data is for public awareness only. Auxilio provides real-time emergency alerts and safety tools for residents and visitors of the Dominican Republic.
     </p>
 
+   </div>
   </div>
 </section>
 
