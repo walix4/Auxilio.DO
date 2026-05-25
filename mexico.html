@@ -65,7 +65,12 @@
     .ct-lang-opt:hover{background:#f1f5f9}
     .ct-lang-opt.active{background:#f0f7ff;color:#1d4ed8;font-weight:600}
     #cg-prov-section{background:linear-gradient(180deg,#d4deeb 0%,#e8eef6 100%);padding:30px 0 28px}
-    </style>
+    
+.flag-ic{display:inline-block;width:18px;height:13px;border-radius:2px;object-fit:cover;vertical-align:-2px;box-shadow:0 0 0 1px rgba(0,0,0,.08);margin-right:4px}
+.flag-ic-md{display:inline-block;width:22px;height:16px;border-radius:3px;object-fit:cover;vertical-align:-3px;box-shadow:0 0 0 1px rgba(0,0,0,.08);margin-right:5px}
+.flag-ic-lg{display:inline-block;width:42px;height:30px;border-radius:5px;object-fit:cover;vertical-align:-9px;box-shadow:0 0 0 1px rgba(0,0,0,.15),0 4px 10px rgba(0,0,0,.25);margin-right:8px}
+.ic{display:inline-block;width:1em;height:1em;vertical-align:-.15em;flex-shrink:0}
+</style>
 </head>
 <body>
 <header data-nav style="background-color:#0a1a4a" class="fixed inset-x-0 top-0 z-50 text-white">
@@ -75,12 +80,12 @@
             <img src="images/auxilio-logo-white.png" alt="Auxilio" class="h-5 w-auto hidden sm:block" />
         </a>
         <ul class="hidden lg:flex flex-1 items-center justify-center gap-1 xl:gap-1.5 text-sm font-medium text-white/80 whitespace-nowrap">
-            <li><a href="index.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇩🇴 Dom. Republic</a></li>
-            <li><a href="el-salvador.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇸🇻 El Salvador</a></li>
-            <li><a href="mexico.html" style="background:rgba(255,255,255,.15)" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-white font-bold text-xs">🇲🇽 Mexico</a></li>
-            <li><a href="ecuador.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇪🇨 Ecuador</a></li>
-            <li><a href="peru.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇵🇪 Peru</a></li>
-            <li><a href="canada.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs">🇨🇦 Canada</a></li>
+            <li><a href="index.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs"><img class="flag-ic" src="https://flagcdn.com/w40/do.png" alt="" /> Dom. Republic</a></li>
+            <li><a href="el-salvador.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs"><img class="flag-ic" src="https://flagcdn.com/w40/sv.png" alt="" /> El Salvador</a></li>
+            <li><a href="mexico.html" style="background:rgba(255,255,255,.15)" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-white font-bold text-xs"><img class="flag-ic" src="https://flagcdn.com/w40/mx.png" alt="" /> Mexico</a></li>
+            <li><a href="ecuador.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs"><img class="flag-ic" src="https://flagcdn.com/w40/ec.png" alt="" /> Ecuador</a></li>
+            <li><a href="peru.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs"><img class="flag-ic" src="https://flagcdn.com/w40/pe.png" alt="" /> Peru</a></li>
+            <li><a href="canada.html" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-white/10 hover:text-white transition-all text-xs"><img class="flag-ic" src="https://flagcdn.com/w40/ca.png" alt="" /> Canada</a></li>
         </ul>
         <button class="ml-auto lg:hidden flex flex-col gap-1.5 p-2" onclick="document.getElementById('mobile-menu').classList.toggle('is-open')" aria-label="Menu">
             <span class="block w-5 h-0.5 bg-white"></span><span class="block w-5 h-0.5 bg-white"></span><span class="block w-5 h-0.5 bg-white"></span>
@@ -88,12 +93,12 @@
     </nav>
     <div id="mobile-menu" data-menu-panel class="lg:hidden absolute inset-x-4 top-[68px] rounded-xl bg-white border border-slate-100 shadow-xl p-5">
         <ul class="flex flex-col gap-1 text-sm font-medium">
-            <li><a href="index.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇩🇴 Dominican Republic</a></li>
-            <li><a href="el-salvador.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇸🇻 El Salvador</a></li>
-            <li><a href="mexico.html" class="flex items-center gap-2 font-bold text-blue-900 bg-blue-50 rounded-lg px-3 py-2.5">🇲🇽 Mexico <span class="ml-auto text-xs text-blue-400 font-normal">Active</span></a></li>
-            <li><a href="ecuador.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇪🇨 Ecuador</a></li>
-            <li><a href="peru.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇵🇪 Peru</a></li>
-            <li><a href="canada.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50">🇨🇦 Canada</a></li>
+            <li><a href="index.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50"><img class="flag-ic" src="https://flagcdn.com/w40/do.png" alt="" /> Dominican Republic</a></li>
+            <li><a href="el-salvador.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50"><img class="flag-ic" src="https://flagcdn.com/w40/sv.png" alt="" /> El Salvador</a></li>
+            <li><a href="mexico.html" class="flex items-center gap-2 font-bold text-blue-900 bg-blue-50 rounded-lg px-3 py-2.5"><img class="flag-ic" src="https://flagcdn.com/w40/mx.png" alt="" /> Mexico <span class="ml-auto text-xs text-blue-400 font-normal">Active</span></a></li>
+            <li><a href="ecuador.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50"><img class="flag-ic" src="https://flagcdn.com/w40/ec.png" alt="" /> Ecuador</a></li>
+            <li><a href="peru.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50"><img class="flag-ic" src="https://flagcdn.com/w40/pe.png" alt="" /> Peru</a></li>
+            <li><a href="canada.html" class="flex items-center gap-2 text-slate-700 rounded-lg px-3 py-2.5 hover:bg-slate-50"><img class="flag-ic" src="https://flagcdn.com/w40/ca.png" alt="" /> Canada</a></li>
         </ul>
     </div>
 </header>
@@ -104,7 +109,7 @@
     <div style="font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.24em;text-transform:uppercase;margin-bottom:18px">Auxilio · Crime Grade Map</div>
     <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
       <div>
-        <h1 style="font-size:38px;font-weight:900;color:#fff;margin:0 0 8px;letter-spacing:-.02em;line-height:1.05">🇲🇽 Mexico</h1>
+        <h1 style="font-size:38px;font-weight:900;color:#fff;margin:0 0 8px;letter-spacing:-.02em;line-height:1.05"><img class="flag-ic-lg" src="https://flagcdn.com/w80/mx.png" alt="" /> Mexico</h1>
         <p style="font-size:14px;color:rgba(255,255,255,.65);margin:0">32 States · Homicide /100k · SESNSP Data · 2022</p>
       </div>
       <div style="margin-left:auto;display:flex;gap:14px;flex-wrap:wrap">
@@ -140,7 +145,7 @@
 <section id="cg-main-section" style="background:linear-gradient(180deg,#e8eef6,#dde5f0);padding:32px 0">
   <div style="max-width:1200px;margin:0 auto;padding:0 24px">
     <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.07)">
-      <p style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.18em;text-transform:uppercase;margin:0 0 12px">🇲🇽 Crime Grade Map · Mexico · States</p>
+      <p style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.18em;text-transform:uppercase;margin:0 0 12px"><img class="flag-ic-md" src="https://flagcdn.com/w40/mx.png" alt="" /> Crime Grade Map · Mexico · States</p>
       <div id="cg-map-loading" style="display:flex;align-items:center;justify-content:center;height:360px;color:#94a3b8;font-size:12px;gap:8px">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" style="animation:cgMapSpin 1s linear infinite;flex-shrink:0"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-opacity=".2"/><path d="M21 12a9 9 0 00-9-9"/></svg>
         Loading map…
@@ -155,13 +160,13 @@
   <div style="max-width:1400px;margin:0 auto;padding:0 24px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
       <div>
-        <div style="font-size:14px;font-weight:800;color:#0f172a">🗺️ All 32 States</div>
+        <div style="font-size:14px;font-weight:800;color:#0f172a"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V4.618a1 1 0 011.447-.894L9 6m0 14l6-3m-6 3V6m6 11l4.553 2.276A1 1 0 0021 18.382V6.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 2"/></svg> All 32 States</div>
         <div style="font-size:11px;color:#64748b;margin-top:3px">Click a state card to filter the table below</div>
       </div>
       <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
         <div id="cgpf-tabs" style="display:flex;gap:5px;flex-wrap:wrap"></div>
         <div id="cg-sel-badge" style="display:none;align-items:center;gap:5px;background:#fff;border:1.5px solid #e2e8f0;border-radius:20px;padding:4px 8px 4px 11px;font-size:12px;font-weight:600;color:#0f172a;box-shadow:0 1px 4px rgba(0,0,0,.07)">
-          <span style="font-size:10px;margin-right:1px">📍</span>
+          <span style="font-size:10px;margin-right:1px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
           <span id="cg-sel-text" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
           <span onclick="cgProvClearSel()" style="cursor:pointer;color:#94a3b8;font-size:16px;line-height:1;margin-left:3px;flex-shrink:0" title="Clear">×</span>
         </div>
@@ -175,7 +180,7 @@
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px">
       <div>
-        <div style="font-size:16px;font-weight:600;color:#0f172a">🇲🇽 Crime Grade · Mexico — By State · 2022</div>
+        <div style="font-size:16px;font-weight:600;color:#0f172a"><img class="flag-ic-md" src="https://flagcdn.com/w40/mx.png" alt="" /> Crime Grade · Mexico — By State · 2022</div>
         <div style="font-size:11px;color:#94a3b8;margin-top:4px">Homicide /100k · SESNSP · 32 states</div>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
@@ -239,11 +244,11 @@
 </section>
 </main>
 
-<button id="ct-lang-btn" onclick="ctLangToggle()" title="Switch language" aria-label="Switch language">🌐</button>
+<button id="ct-lang-btn" onclick="ctLangToggle()" title="Switch language" aria-label="Switch language"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></button>
 <div id="ct-lang-menu" role="menu">
-  <div class="ct-lang-opt active" onclick="ctLangSet('en')">🇺🇸 &nbsp;English</div>
-  <div class="ct-lang-opt" onclick="ctLangSet('es')">🇲🇽 &nbsp;Español</div>
-  <div class="ct-lang-opt" onclick="ctLangSet('fr')">🇫🇷 &nbsp;Français</div>
+  <div class="ct-lang-opt active" onclick="ctLangSet('en')"><img class="flag-ic" src="https://flagcdn.com/w40/us.png" alt="" /> &nbsp;English</div>
+  <div class="ct-lang-opt" onclick="ctLangSet('es')"><img class="flag-ic" src="https://flagcdn.com/w40/mx.png" alt="" /> &nbsp;Español</div>
+  <div class="ct-lang-opt" onclick="ctLangSet('fr')"><img class="flag-ic" src="https://flagcdn.com/w40/fr.png" alt="" /> &nbsp;Français</div>
 </div>
 
 <script>
@@ -321,7 +326,7 @@ function ctRender(){
   if(distEl){distEl.innerHTML='';['A','B','C','D','F'].forEach(function(g){if(!dist[g])return;var seg=document.createElement('div');seg.className='ct-dist-seg';seg.style.background=CT_GC[g].bg;seg.style.flex=dist[g];seg.innerHTML='<span>'+g+'</span><span style="font-size:9.5px;opacity:.8">('+dist[g]+')</span>';distEl.appendChild(seg);});}
   var html='';
   html+='<tr class="ct-nat-row"><td style="color:#94a3b8;font-size:11px">—</td>'
-    +'<td><span style="font-weight:600;color:#64748b;font-size:12px">🇲🇽 National Average</span></td>'
+    +'<td><span style="font-weight:600;color:#64748b;font-size:12px"><img class="flag-ic" src="https://flagcdn.com/w40/mx.png" alt="" /> National Average</span></td>'
     +'<td><span style="background:#EE7728;color:#fff;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700">D</span></td>'
     +'<td><div style="font-size:13px;font-weight:700;color:#475569">'+CT_NAT+'</div></td>'
     +'<td style="color:#94a3b8;font-size:11px">128.5M</td><td>—</td><td>—</td></tr>';
