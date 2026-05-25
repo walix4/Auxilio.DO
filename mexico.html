@@ -439,8 +439,9 @@ function cgRenderProvGrid(){
     var g=ctGrade(d.homicide);var gc=CG_GC2[g]||CG_GC2.C;var pct=Math.min(100,Math.round(d.homicide/CT_MAX*100));
     var isSel=cgSelProv===d.province;var rank=sortedByHom.indexOf(d)+1;var diff=d.homicide-CT_NAT;
     var deltaHtml='';
-    if(diff>0)deltaHtml='<span class="cg-delta" style="background:rgba(220,38,38,.1);color:#b91c1c">'+SVG_UP+' +'+diff+'</span>';
-    else if(diff<0)deltaHtml='<span class="cg-delta" style="background:rgba(22,163,74,.12);color:#15803d">'+SVG_DN+' '+diff+'</span>';
+    var diffR=Math.round(diff*10)/10;
+    if(diffR>0)deltaHtml='<span class="cg-delta" style="background:rgba(220,38,38,.1);color:#b91c1c">'+SVG_UP+' +'+diffR+'</span>';
+    else if(diffR<0)deltaHtml='<span class="cg-delta" style="background:rgba(22,163,74,.12);color:#15803d">'+SVG_DN+' −'+Math.abs(diffR)+'</span>';
     else deltaHtml='<span class="cg-delta" style="background:#f1f5f9;color:#64748b">= nat</span>';
     var trendHtml='';
     if(d.trend==='up')trendHtml='<span class="cg-trend" style="background:rgba(220,38,38,.1);color:#b91c1c">'+SVG_UP+'</span>';
