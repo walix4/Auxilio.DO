@@ -29,11 +29,24 @@
     @media(max-width:1024px){.cg-prov-grid{grid-template-columns:repeat(4,1fr)}}
     @media(max-width:768px){.cg-prov-grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:500px){.cg-prov-grid{grid-template-columns:repeat(2,1fr)}}
-    .cg-prov-card{background:#fff;border-radius:13px;padding:13px 12px 11px;cursor:pointer;border:2px solid transparent;transition:border-color .2s,box-shadow .22s,transform .18s;position:relative;overflow:hidden;animation:cgCardIn .4s ease both}
-    .cg-prov-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.11);transform:translateY(-3px)}
-    .cg-prov-card.cgsel{box-shadow:0 8px 26px rgba(0,0,0,.16);transform:translateY(-3px)}
-    .cg-card-bar-wrap{height:4px;border-radius:2px;background:#e9edf3;margin-top:9px;overflow:hidden}
-    .cg-card-bar{height:100%;border-radius:2px;width:0;transition:width .9s cubic-bezier(.4,0,.2,1)}
+    .cg-prov-card{background:#fff;border-radius:16px;padding:18px 16px 16px;cursor:pointer;border:1.5px solid rgba(15,23,42,.06);transition:border-color .22s,box-shadow .26s,transform .22s;position:relative;overflow:hidden;animation:cgCardIn .42s ease both;box-shadow:0 1px 3px rgba(15,23,42,.04);min-height:172px;display:flex;flex-direction:column}
+.cg-prov-card:hover{box-shadow:0 16px 36px -14px rgba(15,23,42,.22);transform:translateY(-4px);border-color:var(--cgc)}
+.cg-prov-card.cgsel{box-shadow:0 16px 36px -10px rgba(15,23,42,.28);transform:translateY(-4px);border-color:var(--cgc)}
+.cg-prov-card .cg-tint{position:absolute;inset:0;background:linear-gradient(180deg,var(--cgct) 0%,transparent 55%);pointer-events:none;opacity:.7;transition:opacity .22s}
+.cg-prov-card:hover .cg-tint,.cg-prov-card.cgsel .cg-tint{opacity:1}
+.cg-prov-card .cg-rank{font-size:9px;letter-spacing:.16em;color:#94a3b8;font-weight:800;text-transform:uppercase;margin-bottom:4px}
+.cg-prov-card .cg-name{font-size:12.5px;font-weight:800;color:#0f172a;line-height:1.25;word-break:break-word}
+.cg-prov-card .cg-chip{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;background:var(--cgc);box-shadow:0 4px 10px -2px var(--cgcs,rgba(0,0,0,.18))}
+.cg-prov-card .cg-num{font-size:30px;font-weight:900;color:var(--cgc);line-height:1;letter-spacing:-.025em}
+.cg-prov-card .cg-unit{font-size:9.5px;font-weight:600;color:#94a3b8;margin-left:4px;letter-spacing:.04em}
+.cg-prov-card .cg-trend{display:inline-flex;align-items:center;gap:2px;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;line-height:1}
+.cg-card-bar-wrap{height:5px;border-radius:3px;background:#eef2f6;margin-top:12px;overflow:hidden;position:relative;z-index:1}
+.cg-prov-card .cg-foot{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:11px;font-size:10px;color:#64748b;font-weight:600}
+.cg-card-bar{height:100%;border-radius:3px;width:0;background:linear-gradient(90deg,var(--cgc),var(--cgc2,var(--cgc)));transition:width 1s cubic-bezier(.4,0,.2,1);box-shadow:0 0 0 1px rgba(0,0,0,.02) inset}
+.cg-prov-card .cg-pop{display:inline-flex;align-items:center;gap:4px;color:#64748b}
+.cg-prov-card .cg-delta{display:inline-flex;align-items:center;gap:2px;padding:3px 7px;border-radius:6px;font-size:10px;font-weight:700;line-height:1}
+.cg-prov-card .cg-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;position:relative;z-index:1}
+.cg-prov-card .cg-num-row{display:flex;align-items:baseline;gap:2px;margin-top:14px;position:relative;z-index:1}
     /* Table */
     @keyframes ctBarIn{from{width:0}to{width:var(--ctw,0%)}}
     @keyframes ctRowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -517,24 +530,30 @@ function cgRenderProvGrid(){
   var grid=document.getElementById('cg-prov-grid');if(!grid)return;
   var filtered=cgCurGrade==='all'?SV_TABLE:SV_TABLE.filter(function(d){return ctGrade(d.homicide)===cgCurGrade;});
   grid.innerHTML='';
+  var CG_RGB={A:'34,166,32',B:'57,156,216',C:'241,183,44',D:'238,119,40',F:'230,32,26'};
+  var CG_LIGHT={A:'#5fd05c',B:'#69c0eb',C:'#ffd571',D:'#ff9856',F:'#ff5046'};
+  var SVG_UP='<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>';
+  var SVG_DN='<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>';
+  var SVG_USERS='<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.7"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>';
+  var sortedByHom=filtered.slice().sort(function(a,b){return b.homicide-a.homicide;});
   filtered.forEach(function(d,i){
-    var g=ctGrade(d.homicide);
-    var gc=CG_GC2[g]||CG_GC2.B;
-    var pct=Math.round(d.homicide/CT_MAX*100);
-    var isSel=cgSelProv===d.province;
+    var g=ctGrade(d.homicide);var gc=CG_GC2[g]||CG_GC2.C;var pct=Math.min(100,Math.round(d.homicide/CT_MAX*100));
+    var isSel=cgSelProv===d.province;var rank=sortedByHom.indexOf(d)+1;var diff=d.homicide-CT_NAT;
+    var deltaHtml='';
+    if(diff>0)deltaHtml='<span class="cg-delta" style="background:rgba(220,38,38,.1);color:#b91c1c">'+SVG_UP+' +'+diff+'</span>';
+    else if(diff<0)deltaHtml='<span class="cg-delta" style="background:rgba(22,163,74,.12);color:#15803d">'+SVG_DN+' '+diff+'</span>';
+    else deltaHtml='<span class="cg-delta" style="background:#f1f5f9;color:#64748b">= nat</span>';
+    var trendHtml='';
+    if(d.trend==='up')trendHtml='<span class="cg-trend" style="background:rgba(220,38,38,.1);color:#b91c1c">'+SVG_UP+'</span>';
+    else if(d.trend==='dn')trendHtml='<span class="cg-trend" style="background:rgba(22,163,74,.12);color:#15803d">'+SVG_DN+'</span>';
     var card=document.createElement('div');
     card.className='cg-prov-card'+(isSel?' cgsel':'');
-    card.style.animationDelay=(i*0.03)+'s';
-    if(isSel)card.style.borderColor=gc.bg;
-    card.innerHTML=
-      '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+gc.bg+';border-radius:13px 13px 0 0;opacity:'+(isSel?'1':'.35')+';transition:opacity .2s"></div>'+
-      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:5px;margin-top:4px">'+
-        '<div style="font-size:11.5px;font-weight:700;color:#0f172a;line-height:1.3;flex:1;min-width:0;word-break:break-word">'+d.province+'</div>'+
-        '<div style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;background:'+gc.bg+'">'+g+'</div>'+
-      '</div>'+
-      '<div style="font-size:20px;font-weight:900;color:'+gc.bg+';margin-top:8px;line-height:1;letter-spacing:-.02em">'+d.homicide+'<span style="font-size:9.5px;font-weight:500;color:#94a3b8;margin-left:3px;letter-spacing:0">/100k</span></div>'+
-      '<div class="cg-card-bar-wrap"><div class="cg-card-bar" style="background:'+gc.bg+'" data-w="'+pct+'%"></div></div>'+
-      '<div style="font-size:10px;color:#94a3b8;margin-top:7px;font-weight:500">'+cgFmtPop(d.pop)+' pop.</div>';
+    card.style.animationDelay=(i*0.028)+'s';
+    card.style.setProperty('--cgc',gc.bg);
+    card.style.setProperty('--cgc2',CG_LIGHT[g]||gc.bg);
+    card.style.setProperty('--cgct','rgba('+(CG_RGB[g]||'148,163,184')+',.08)');
+    card.style.setProperty('--cgcs','rgba('+(CG_RGB[g]||'148,163,184')+',.45)');
+    card.innerHTML='<div class="cg-tint"></div><div class="cg-row"><div style="flex:1;min-width:0"><div class="cg-rank">Rank #'+rank+'</div><div class="cg-name">'+d.province+'</div></div><div class="cg-chip">'+g+'</div></div><div class="cg-num-row"><span class="cg-num">'+d.homicide+'</span><span class="cg-unit">/100k</span><span style="margin-left:auto">'+trendHtml+'</span></div><div class="cg-card-bar-wrap"><div class="cg-card-bar" data-w="'+pct+'%"></div></div><div class="cg-foot"><span class="cg-pop">'+SVG_USERS+' '+cgFmtPop(d.pop)+'</span>'+deltaHtml+'</div>';
     card.onclick=function(){window.cgSelectProv(d.province);};
     grid.appendChild(card);
   });
