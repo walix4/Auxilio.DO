@@ -1499,7 +1499,8 @@ function cgRenderProvGrid(){
     var pct=Math.round(d.homicide/CG_MAX*100);
     var isSel=cgSelProv===d.province;
     var rank=sortedByHom.indexOf(d)+1;
-    var diff=d.homicide-CT_NAT;
+    var natAvg=(typeof window!=='undefined'&&window.CT_NAT)||16;
+    var diff=d.homicide-natAvg;
     var deltaHtml='';
     if(diff>0){deltaHtml='<span class="cg-delta" style="background:rgba(220,38,38,.1);color:#b91c1c">'+SVG_UP+' +'+diff+'</span>';}
     else if(diff<0){deltaHtml='<span class="cg-delta" style="background:rgba(22,163,74,.12);color:#15803d">'+SVG_DN+' '+diff+'</span>';}
