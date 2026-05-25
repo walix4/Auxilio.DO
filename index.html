@@ -377,8 +377,8 @@
 
             <!-- Interactive US Map -->
             <div id="cg-map-wrap" style="position:relative;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:18px 20px 14px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.06)">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-                    <p style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.18em;text-transform:uppercase">Crime Grade Map · Click a state to explore</p>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+                    <p style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.18em;text-transform:uppercase">🇩🇴 Crime Grade Map · Dominican Republic · Provinces</p>
                     <div style="display:flex;align-items:center;gap:10px">
                         <span style="display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#22A620"><span style="width:8px;height:8px;border-radius:2px;background:#22A620;display:inline-block"></span>A</span>
                         <span style="display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#399CD8"><span style="width:8px;height:8px;border-radius:2px;background:#399CD8;display:inline-block"></span>B</span>
@@ -387,11 +387,11 @@
                         <span style="display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#E6201A"><span style="width:8px;height:8px;border-radius:2px;background:#E6201A;display:inline-block"></span>F</span>
                     </div>
                 </div>
-                <div id="cg-map-loading" style="display:flex;align-items:center;justify-content:center;height:300px;color:#94a3b8;font-size:12px;gap:8px">
+                <div id="cg-map-loading" style="display:flex;align-items:center;justify-content:center;height:320px;color:#94a3b8;font-size:12px;gap:8px">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" style="animation:cgMapSpin 1s linear infinite;flex-shrink:0"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-opacity=".2"/><path d="M21 12a9 9 0 00-9-9"/></svg>
                     Loading map…
                 </div>
-                <svg id="cg-us-map-svg" style="display:none;width:100%;border-radius:6px"></svg>
+                <div id="cg-dr-map-container" style="width:100%;border-radius:6px;overflow:hidden"></div>
                 <div id="cg-map-tooltip" style="position:absolute;pointer-events:none;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:9px;padding:9px 13px;font-size:12px;color:#0f172a;display:none;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.12);white-space:nowrap;line-height:1.5"></div>
             </div>
 
@@ -941,107 +941,113 @@ function cgBackToStates(){
 }
 window.cgBackToStates=cgBackToStates;
 
-/* Interactive US Map */
-var cgMapBuilt=false,cgMapDepsOK=false;
-var FIPS_ABBR={"01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC","12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY","22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN","28":"MS","29":"MO","30":"MT","31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH","40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN","48":"TX","49":"UT","50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY"};
+/* Interactive Dominican Republic Map */
+var cgMapBuilt=false;
 
-function cgLoadMapDeps(cb){
-  if(cgMapDepsOK){cb();return;}
-  var s1=document.createElement('script');
-  s1.src='https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
-  s1.onload=function(){
-    var s2=document.createElement('script');
-    s2.src='https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';
-    s2.onload=function(){cgMapDepsOK=true;cb();};
-    document.head.appendChild(s2);
-  };
-  document.head.appendChild(s1);
-}
+var DR_PROVINCES={
+  'DO-01':{name:'Distrito Nacional',homicide:45,grade:'F'},
+  'DO-02':{name:'Azua',homicide:18,grade:'C'},
+  'DO-03':{name:'Baoruco',homicide:14,grade:'B'},
+  'DO-04':{name:'Barahona',homicide:20,grade:'C'},
+  'DO-05':{name:'Dajabón',homicide:10,grade:'B'},
+  'DO-06':{name:'Duarte',homicide:22,grade:'C'},
+  'DO-07':{name:'La Estrelleta',homicide:12,grade:'B'},
+  'DO-08':{name:'El Seibo',homicide:15,grade:'B'},
+  'DO-09':{name:'Espaillat',homicide:16,grade:'C'},
+  'DO-10':{name:'Independencia',homicide:9,grade:'B'},
+  'DO-11':{name:'La Altagracia',homicide:11,grade:'B'},
+  'DO-12':{name:'La Romana',homicide:28,grade:'D'},
+  'DO-13':{name:'La Vega',homicide:19,grade:'C'},
+  'DO-14':{name:'María Trinidad Sánchez',homicide:13,grade:'B'},
+  'DO-15':{name:'Monte Cristi',homicide:17,grade:'C'},
+  'DO-16':{name:'Pedernales',homicide:6,grade:'A'},
+  'DO-17':{name:'Peravia',homicide:24,grade:'C'},
+  'DO-18':{name:'Puerto Plata',homicide:18,grade:'C'},
+  'DO-19':{name:'Hermanas Mirabal',homicide:13,grade:'B'},
+  'DO-20':{name:'Samaná',homicide:8,grade:'B'},
+  'DO-21':{name:'San Cristóbal',homicide:35,grade:'D'},
+  'DO-22':{name:'San Juan',homicide:14,grade:'B'},
+  'DO-23':{name:'San Pedro de Macorís',homicide:32,grade:'D'},
+  'DO-24':{name:'Sánchez Ramírez',homicide:14,grade:'B'},
+  'DO-25':{name:'Santiago',homicide:28,grade:'D'},
+  'DO-26':{name:'Santiago Rodríguez',homicide:10,grade:'B'},
+  'DO-27':{name:'Valverde',homicide:18,grade:'C'},
+  'DO-28':{name:'Monseñor Nouel',homicide:20,grade:'C'},
+  'DO-29':{name:'Monte Plata',homicide:22,grade:'C'},
+  'DO-30':{name:'Hato Mayor',homicide:16,grade:'C'},
+  'DO-31':{name:'San José de Ocoa',homicide:8,grade:'B'},
+  'DO-32':{name:'Santo Domingo',homicide:42,grade:'F'}
+};
 
 function cgInitMap(){
   if(cgMapBuilt)return;
   var wrap=document.getElementById('cg-map-wrap');
-  if(!wrap)return;
-  cgLoadMapDeps(function(){
-    var states=cgBuildStateData();
-    var gradeOf={};
-    states.forEach(function(s){gradeOf[s.abbr]=s;});
-    fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
-      .then(function(r){return r.json();})
-      .then(function(us){
-        var loading=document.getElementById('cg-map-loading');
-        var svgEl=document.getElementById('cg-us-map-svg');
-        if(loading)loading.style.display='none';
-        if(!svgEl)return;
-        svgEl.style.display='block';
-        var W=wrap.clientWidth-40;
-        var H=Math.max(220,Math.round(W*0.57));
-        var topo=topojson.feature(us,us.objects.states);
-        var features=topo.features;
-        var projection=d3.geoAlbersUsa().fitSize([W,H],topo);
-        var pathGen=d3.geoPath().projection(projection);
-        var tooltip=document.getElementById('cg-map-tooltip');
-        var svg=d3.select('#cg-us-map-svg')
-          .attr('viewBox','0 0 '+W+' '+H)
-          .attr('width','100%').attr('height',H);
-        svg.append('rect').attr('width',W).attr('height',H).attr('fill','#f1f5f9').attr('rx',6);
-        svg.selectAll('path.cg-sp')
-          .data(features).enter().append('path').attr('class','cg-sp')
-          .attr('d',pathGen)
-          .attr('fill',function(d){
-            var abbr=FIPS_ABBR[('00'+d.id).slice(-2)];
-            var s=gradeOf[abbr];
-            return s?CG_MAP_GRADE[s.grade]:'#1a2744';
-          })
-          .attr('stroke','#f1f5f9').attr('stroke-width',0.8)
-          .attr('fill-opacity',0.88).style('cursor','pointer')
-          .on('mouseover',function(event,d){
-            d3.select(this).raise().attr('fill-opacity',1).attr('stroke','rgba(255,255,255,.7)').attr('stroke-width',1.8);
-            var abbr=FIPS_ABBR[('00'+d.id).slice(-2)];
-            var s=gradeOf[abbr];
-            if(s&&tooltip){
-              var gc=CG_MAP_GRADE[s.grade]||CG_MAP_GRADE.F;
-              tooltip.innerHTML='<div style="font-weight:800;color:'+gc+';font-size:13px">'+s.name+'</div>'
-                +'<div style="color:#64748b;font-size:10px;margin-top:2px">Grade <span style="color:'+gc+';font-weight:900">'+s.grade+'</span> · '+s.cities.length+' '+(s.cities.length===1?'city':'cities')+'</div>';
-              tooltip.style.display='block';
-              var rect=wrap.getBoundingClientRect();
-              tooltip.style.left=Math.min(event.clientX-rect.left+18,rect.width-170)+'px';
-              tooltip.style.top=Math.max(40,event.clientY-rect.top-60)+'px';
-            }
-          })
-          .on('mousemove',function(event){
-            if(tooltip&&tooltip.style.display==='block'){
-              var rect=wrap.getBoundingClientRect();
-              tooltip.style.left=Math.min(event.clientX-rect.left+18,rect.width-170)+'px';
-              tooltip.style.top=Math.max(40,event.clientY-rect.top-60)+'px';
-            }
-          })
-          .on('mouseout',function(){
-            d3.select(this).attr('fill-opacity',0.88).attr('stroke','#f1f5f9').attr('stroke-width',0.8);
-            if(tooltip)tooltip.style.display='none';
-          })
-          .on('click',function(event,d){
-            var abbr=FIPS_ABBR[('00'+d.id).slice(-2)];
-            if(abbr)cgSelectState(abbr);
-          });
-        svg.append('path')
-          .datum(topojson.mesh(us,us.objects.states,function(a,b){return a!==b;}))
-          .attr('fill','none').attr('stroke','rgba(255,255,255,.07)').attr('stroke-width',0.4)
-          .attr('d',pathGen);
-        svg.selectAll('text.cg-sl')
-          .data(features).enter().append('text').attr('class','cg-sl')
-          .attr('transform',function(d){var c=pathGen.centroid(d);return c&&isFinite(c[0])?'translate('+c+')':'translate(-9999,-9999)';})
-          .attr('text-anchor','middle').attr('dy','.35em')
-          .style('fill','rgba(255,255,255,.95)').style('font-size','7px').style('font-weight','800')
-          .style('pointer-events','none').style('text-shadow','0 1px 3px rgba(0,0,0,.7),0 0 6px rgba(0,0,0,.5)')
-          .text(function(d){return FIPS_ABBR[('00'+d.id).slice(-2)]||'';});
-        cgMapBuilt=true;
-      })
-      .catch(function(){
-        var l=document.getElementById('cg-map-loading');
-        if(l){l.innerHTML='Map unavailable';l.style.display='flex';}
+  var container=document.getElementById('cg-dr-map-container');
+  var loading=document.getElementById('cg-map-loading');
+  var tooltip=document.getElementById('cg-map-tooltip');
+  if(!wrap||!container)return;
+
+  fetch('images/dominican-republic.svg')
+    .then(function(r){return r.text();})
+    .then(function(svgText){
+      var parser=new DOMParser();
+      var doc=parser.parseFromString(svgText,'image/svg+xml');
+      var svgEl=doc.querySelector('svg');
+      if(!svgEl)throw new Error('No SVG');
+
+      svgEl.removeAttribute('width');
+      svgEl.removeAttribute('height');
+      svgEl.setAttribute('viewBox','0 0 792.71484 556.42358');
+      svgEl.style.cssText='width:100%;display:block;border-radius:6px;background:#e8eef6';
+
+      var paths=svgEl.querySelectorAll('path[id^="DO-"]');
+      paths.forEach(function(path){
+        var id=path.getAttribute('id');
+        var prov=DR_PROVINCES[id];
+        var grade=prov?prov.grade:'C';
+        var color=CG_MAP_GRADE[grade]||CG_MAP_GRADE.C;
+
+        path.style.fill=color;
+        path.style.fillOpacity='0.85';
+        path.style.stroke='rgba(255,255,255,0.6)';
+        path.style.strokeWidth='0.8';
+        path.style.cursor='pointer';
+
+        path.addEventListener('mouseover',function(e){
+          path.style.fillOpacity='1';
+          path.style.strokeWidth='2';
+          path.style.stroke='rgba(255,255,255,0.9)';
+          if(prov&&tooltip){
+            tooltip.innerHTML='<div style="font-weight:800;color:'+color+';font-size:13px">'+prov.name+'</div>'
+              +'<div style="color:#64748b;font-size:10px;margin-top:3px">Grade <span style="color:'+color+';font-weight:900;font-size:12px">'+grade+'</span>&nbsp;&nbsp;·&nbsp;&nbsp;'+prov.homicide+' homicides/100k</div>';
+            tooltip.style.display='block';
+            var rect=wrap.getBoundingClientRect();
+            tooltip.style.left=Math.min(e.clientX-rect.left+18,rect.width-210)+'px';
+            tooltip.style.top=Math.max(10,e.clientY-rect.top-70)+'px';
+          }
+        });
+        path.addEventListener('mousemove',function(e){
+          if(tooltip&&tooltip.style.display==='block'){
+            var rect=wrap.getBoundingClientRect();
+            tooltip.style.left=Math.min(e.clientX-rect.left+18,rect.width-210)+'px';
+            tooltip.style.top=Math.max(10,e.clientY-rect.top-70)+'px';
+          }
+        });
+        path.addEventListener('mouseout',function(){
+          path.style.fillOpacity='0.85';
+          path.style.strokeWidth='0.8';
+          path.style.stroke='rgba(255,255,255,0.6)';
+          if(tooltip)tooltip.style.display='none';
+        });
       });
-  });
+
+      if(loading)loading.style.display='none';
+      container.appendChild(svgEl);
+      cgMapBuilt=true;
+    })
+    .catch(function(){
+      if(loading){loading.innerHTML='Map unavailable';loading.style.display='flex';}
+    });
 }
 window.cgInitMap=cgInitMap;
 
