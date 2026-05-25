@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Auxilio APP LLC — US City Safety Rankings. Letter-grade crime grades for 125+ US cities, transparent and data-driven." />
+    <meta property="og:title" content="Crime Grade — Auxilio APP LLC" />
+    <meta property="og:description" content="Letter-grade safety rankings for 125+ US cities — transparent, data-driven, and updated annually." />
+    <title>Crime Grade — Auxilio APP LLC</title>
+    <link rel="icon" type="image/png" href="/images/auxilio-logo-new.png" />
+    <link rel="apple-touch-icon" href="/images/auxilio-logo-new.png" />
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        display: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* ── Nav styles ── */
+        [data-nav].is-scrolled {
+            box-shadow: 0 8px 24px -12px rgba(10, 26, 74, .45);
+        }
+        [data-menu-panel] { transform: translateY(-12px); opacity: 0; pointer-events: none; transition: .25s ease; }
+        [data-menu-panel].is-open { transform: none; opacity: 1; pointer-events: auto; }
+
+        /* ── Live ER nav dot ── */
+        .ea-live-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .ea-live-pill-text { color: #fca5a5; font-size: 13px; font-weight: 700; letter-spacing: .06em; }
+        .ea-live-pill:hover .ea-live-pill-text { color: #ffffff; }
+        @keyframes eaLivePulse {
+            0%   { background: #ef4444; box-shadow: 0 0 0 0 rgba(239,68,68,.8); }
+            30%  { background: #ef4444; box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+            50%  { background: #3b82f6; box-shadow: 0 0 0 0 rgba(59,130,246,.8); }
+            80%  { background: #3b82f6; box-shadow: 0 0 0 5px rgba(59,130,246,0); }
+            100% { background: #ef4444; box-shadow: 0 0 0 0 rgba(239,68,68,.8); }
+        }
+        .ea-live-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #ef4444;
+            animation: eaLivePulse 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        /* ── Crime Grade Styles ── */
+        @keyframes cgFadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes cgSlideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes cgPulse{0%,100%{box-shadow:0 0 0 0 rgba(226,75,74,.35)}50%{box-shadow:0 0 0 8px rgba(226,75,74,0)}}
+        @keyframes cgBtnGlow{0%,100%{box-shadow:0 0 0 1px rgba(226,75,74,.25),0 20px 50px -12px rgba(226,75,74,.5)}50%{box-shadow:0 0 0 2px rgba(226,75,74,.55),0 20px 50px -8px rgba(226,75,74,.85),0 0 40px rgba(226,75,74,.25)}}
+        @keyframes cgBtnShimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+        .cg-hero-in{animation:cgFadeUp .65s cubic-bezier(.16,1,.3,1) both}
+        .cg-hero-in-1{animation-delay:.05s}.cg-hero-in-2{animation-delay:.12s}.cg-hero-in-3{animation-delay:.2s}.cg-hero-in-4{animation-delay:.28s}
+        .cg-stat{animation:cgFadeUp .5s cubic-bezier(.16,1,.3,1) both}
+        .cg-stat:nth-child(1){animation-delay:.3s}.cg-stat:nth-child(2){animation-delay:.36s}
+        .cg-stat:nth-child(3){animation-delay:.42s}.cg-stat:nth-child(4){animation-delay:.48s}
+        .cg-stat:nth-child(5){animation-delay:.54s}.cg-stat:nth-child(6){animation-delay:.6s}
+        .cg-legend-item{transition:all .22s cubic-bezier(.16,1,.3,1)}
+        .cg-legend-item:hover:not(.cg-legend-active){transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+        .cg-legend-active{transform:translateY(-2px)!important}
+        .cg-grade-b{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;font-size:15px;font-weight:800;letter-spacing:-.03em;transition:transform .2s,box-shadow .2s}
+        .cg-grade-b:hover{transform:scale(1.15)}
+        .cg-decile-b{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-size:11px;font-weight:700}
+        .cg-rbar{height:4px;border-radius:3px;background:rgba(0,0,0,.08);min-width:56px;margin-top:5px;overflow:hidden}
+        .cg-rbar-f{height:100%;border-radius:3px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+        @keyframes cgMapSpin{to{transform:rotate(360deg)}}
+        .cg-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+        .cg-tbl{width:100%;border-collapse:collapse;font-size:13px}
+        .cg-tbl thead th{font-size:10.5px;font-weight:700;color:#64748b;text-align:left;padding:11px 13px;border-bottom:1px solid rgba(0,0,0,.07);cursor:pointer;white-space:nowrap;user-select:none;background:#f8fafc;letter-spacing:.05em;text-transform:uppercase;transition:color .15s}
+        .cg-tbl thead th:hover{color:#E24B4A}
+        .cg-tbl thead th.cg-sorted{color:#E24B4A}
+        .cg-tbl tbody tr{border-bottom:1px solid rgba(0,0,0,.05);transition:background .15s}
+        .cg-tbl tbody tr:hover{background:rgba(226,75,74,.05)}
+        .cg-tbl tbody tr.cg-nat{background:rgba(0,0,0,.015)}
+        .cg-tbl td{padding:11px 13px;vertical-align:middle}
+        .cg-city{font-weight:700;color:#0f172a;font-size:13.5px;white-space:nowrap}
+        .cg-stag{font-size:10px;color:#94a3b8;margin-left:5px;font-weight:500}
+        .cg-ptag{font-size:10px;color:#94a3b8;display:block;margin-top:2px}
+        .cg-row-in{animation:cgFadeUp .4s cubic-bezier(.16,1,.3,1) both}
+        .cg-analyze-btn{padding:4px 11px;font-size:11px;border-radius:4px;border:1px solid rgba(0,0,0,.1);background:rgba(0,0,0,.04);color:#64748b;cursor:pointer;white-space:nowrap;transition:all .15s;font-weight:500}
+        .cg-analyze-btn:hover{border-color:#E24B4A;color:#E24B4A;background:rgba(226,75,74,.08)}
+        .cg-search-wrap{position:relative}
+        .cg-search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:#94a3b8}
+        .cg-search{padding:10px 14px 10px 38px;border:1px solid rgba(0,0,0,.12);border-radius:4px;font-size:13.5px;background:#fff;color:#0f172a;width:240px;transition:border-color .2s,box-shadow .2s}
+        .cg-search::placeholder{color:#94a3b8}
+        .cg-search:focus{outline:none;border-color:#E24B4A;box-shadow:0 0 0 3px rgba(226,75,74,.12)}
+        .cg-sel{padding:9px 30px 9px 13px;border:1px solid rgba(0,0,0,.12);border-radius:4px;font-size:12.5px;background:#fff;color:#475569;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;transition:border-color .2s,box-shadow .2s}
+        .cg-sel option{background:#fff;color:#0f172a}
+        .cg-sel:focus{outline:none;border-color:#E24B4A;box-shadow:0 0 0 3px rgba(226,75,74,.12)}
+        .cg-reset-btn{padding:9px 16px;border:1px solid rgba(226,75,74,.3);border-radius:4px;font-size:12.5px;background:rgba(226,75,74,.08);color:#E24B4A;cursor:pointer;font-weight:600;display:none;align-items:center;gap:6px;transition:all .18s}
+        .cg-reset-btn:hover{background:rgba(226,75,74,.15);border-color:#E24B4A}
+        .cg-reset-btn.cg-visible{display:inline-flex}
+        .cg-pg-btn{padding:7px 13px;border:1px solid rgba(0,0,0,.1);border-radius:4px;font-size:12px;cursor:pointer;background:#fff;color:#64748b;transition:all .15s;font-weight:500}
+        .cg-pg-btn:hover{border-color:#E24B4A;color:#E24B4A}
+        .cg-pg-btn.cg-pga{background:#E24B4A;border-color:#E24B4A;color:white}
+        .cg-state-card{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative}
+        .cg-state-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.12)!important;border-color:rgba(0,0,0,.15)}
+        .cg-ai-panel{margin-top:20px;padding:20px 24px;border-radius:8px;border:1px solid rgba(56,189,248,.2);background:linear-gradient(135deg,rgba(14,165,233,.05),rgba(16,185,129,.04));display:none}
+        .cg-ai-panel.cg-show{display:block;animation:cgFadeUp .35s cubic-bezier(.16,1,.3,1) both}
+        .cg-dn{color:#16a34a;font-weight:600}.cg-up{color:#dc2626;font-weight:600}.cg-flat{color:#64748b}
+
+        /* font-display utility */
+        .font-display { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+    </style>
+</head>
+<body class="font-sans">
+
+<!-- ======= NAV ======= -->
+<header data-nav style="background-color:#0a1a4a" class="fixed inset-x-0 top-0 z-50 text-white">
+    <nav class="mx-auto flex h-[78px] max-w-7xl items-center px-5 sm:px-8">
+
+        <!-- Logo -->
+        <a href="#" class="flex shrink-0 items-center gap-2.5 group mr-8">
+            <span class="grid place-items-center h-10 w-10 rounded-md bg-white shadow-sm p-1 transition-transform group-hover:rotate-[-4deg]">
+                <img src="/images/auxilio-logo-new.png" alt="" class="h-full w-auto object-contain" />
+            </span>
+            <img src="/images/auxilio-logo-white.png" alt="Auxilio" class="h-5 sm:h-6 w-auto" />
+        </a>
+
+        <!-- Desktop nav -->
+        <ul class="hidden lg:flex flex-1 items-center justify-center gap-5 xl:gap-6 text-sm font-medium text-white/80 whitespace-nowrap">
+            <li><a href="#" class="hover:text-white transition">Home</a></li>
+            <li><a href="#" class="inline-flex items-center gap-1 hover:text-white transition">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.7 5.6 5.6 1.7-5.6 1.7L12 16.6l-1.7-5.6-5.6-1.7 5.6-1.7L12 2z"/></svg>
+                Auxilio AI
+            </a></li>
+            <li><a href="#" class="hover:text-white transition">Citizen App</a></li>
+            <li><a href="#" class="hover:text-white transition">Agent App</a></li>
+            <li><a href="#" class="text-white font-semibold transition">Crime Grade</a></li>
+            <li><a href="#" class="ea-live-pill">
+                <span class="ea-live-dot"></span>
+                <span class="ea-live-pill-text">Live ER</span>
+            </a></li>
+            <li><a href="#" class="hover:text-white transition">Crime Map</a></li>
+        </ul>
+
+        <!-- Buttons -->
+        <div class="ml-auto lg:ml-6 flex items-center gap-2.5 lg:border-l lg:border-white/20 lg:pl-6">
+            <a href="https://auxilionetwork.com/siteadmin/login" target="_blank" rel="noopener" class="inline-flex items-center justify-center h-10 px-5 text-sm font-bold rounded-lg transition hover:bg-white/90" style="background:#ffffff; color:#9b1c1c;">Login</a>
+            <a href="https://auxilionetwork.com/siteadmin/register" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 h-10 px-5 text-sm font-bold text-white rounded-lg transition hover:opacity-90" style="background:#9b1c1c;">Get started <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" data-menu-panel class="lg:hidden absolute inset-x-4 top-[72px] rounded-md bg-white border border-slate-100 shadow-xl p-6">
+        <ul class="flex flex-col gap-4 text-base font-medium text-slate-800">
+            <li><a href="#">Home</a></li>
+            <li><a href="#" class="inline-flex items-center gap-1.5 text-blue-600">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.7 5.6 5.6 1.7-5.6 1.7L12 16.6l-1.7-5.6-5.6-1.7 5.6-1.7L12 2z"/></svg>
+                Auxilio AI
+            </a></li>
+            <li><a href="#">Citizen App</a></li>
+            <li><a href="#">Agent App</a></li>
+            <li><a href="#" class="font-bold" style="color:#22A620">Crime Grade</a></li>
+            <li><a href="#" class="inline-flex items-center gap-2 font-semibold" style="color:#ef4444;">
+                <span class="ea-live-dot" style="width:8px;height:8px;"></span>
+                Live ER
+            </a></li>
+            <li><a href="#">Crime Map</a></li>
+            <li class="pt-2 flex flex-col gap-2">
+                <a href="https://auxilionetwork.com/siteadmin/login" target="_blank" rel="noopener" class="flex items-center justify-center py-2.5 text-sm font-bold rounded-lg border border-slate-200" style="background:#ffffff; color:#9b1c1c;">Login</a>
+                <a href="https://auxilionetwork.com/siteadmin/register" target="_blank" rel="noopener" class="flex items-center justify-center gap-1.5 py-2.5 text-sm font-bold text-white rounded-lg" style="background:#9b1c1c;">Get started <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<main class="pt-[78px]">
+
+<!-- ======= CRIME GRADE VIEW ======= -->
+
+<!-- ── HERO ── -->
+<section id="cg-hero-section" class="relative overflow-hidden" style="min-height:calc(100vh - 78px);display:flex;flex-direction:column;justify-content:center;background:radial-gradient(ellipse at 18% -10%,rgba(255,255,255,.5) 0%,transparent 55%),radial-gradient(ellipse at 90% 110%,rgba(13,90,30,.55) 0%,transparent 55%),linear-gradient(160deg,#34d058 0%,#22A620 44%,#1c8a1a 72%,#15691a 100%)">
+
+    <!-- grid overlay -->
+    <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(6,52,15,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(6,52,15,.08) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 90% at 50% 30%,black,transparent 85%);mask-image:radial-gradient(ellipse 80% 90% at 50% 30%,black,transparent 85%)"></div>
+    <!-- glows -->
+    <div style="position:absolute;pointer-events:none;z-index:0;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.5) 0%,transparent 70%);top:-240px;left:-180px;filter:blur(40px)"></div>
+    <div style="position:absolute;pointer-events:none;z-index:0;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,rgba(13,90,30,.5) 0%,transparent 70%);bottom:-240px;right:-200px;filter:blur(40px)"></div>
+
+    <!-- decorative city rankings art (absolutely positioned) -->
+    <div class="hidden md:block" style="position:absolute;right:15%;top:50%;transform:translateY(-50%);width:clamp(340px,26vw,430px);height:clamp(340px,26vw,430px);pointer-events:none;z-index:0;">
+        <svg viewBox="0 0 200 200" class="w-full h-full">
+            <defs>
+                <radialGradient id="cg-rank-glow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity=".1"/>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                </radialGradient>
+            </defs>
+            <circle cx="100" cy="100" r="92" fill="url(#cg-rank-glow)"/>
+            <circle cx="100" cy="100" r="92" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+
+            <!-- header label -->
+            <text x="100" y="24" text-anchor="middle" font-size="6.5" font-weight="700" fill="rgba(255,255,255,.55)" font-family="system-ui,sans-serif" letter-spacing="1.8">US CITY SAFETY RANKINGS</text>
+
+            <!-- Card 1: Austin A -->
+            <rect x="15" y="34" width="170" height="30" rx="5" fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.32)" stroke-width=".7"/>
+            <rect x="155" y="38" width="24" height="22" rx="4" fill="#15803d"/>
+            <text x="167" y="54" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="system-ui,sans-serif">A</text>
+            <text x="25" y="53" font-size="7" font-weight="800" fill="rgba(255,255,255,.45)" font-family="system-ui,sans-serif">01</text>
+            <text x="40" y="53" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.95)" font-family="system-ui,sans-serif">Austin, TX</text>
+
+            <!-- Card 2: Denver B -->
+            <rect x="15" y="72" width="170" height="30" rx="5" fill="rgba(255,255,255,.11)" stroke="rgba(255,255,255,.24)" stroke-width=".7"/>
+            <rect x="155" y="76" width="24" height="22" rx="4" fill="#2563eb"/>
+            <text x="167" y="92" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="system-ui,sans-serif">B</text>
+            <text x="25" y="91" font-size="7" font-weight="800" fill="rgba(255,255,255,.45)" font-family="system-ui,sans-serif">02</text>
+            <text x="40" y="91" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.82)" font-family="system-ui,sans-serif">Denver, CO</text>
+
+            <!-- Card 3: Chicago C -->
+            <rect x="15" y="110" width="170" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.18)" stroke-width=".7"/>
+            <rect x="155" y="114" width="24" height="22" rx="4" fill="#ca8a04"/>
+            <text x="167" y="130" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="system-ui,sans-serif">C</text>
+            <text x="25" y="129" font-size="7" font-weight="800" fill="rgba(255,255,255,.45)" font-family="system-ui,sans-serif">03</text>
+            <text x="40" y="129" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.68)" font-family="system-ui,sans-serif">Chicago, IL</text>
+
+            <!-- Card 4: Memphis F -->
+            <rect x="15" y="148" width="170" height="30" rx="5" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.13)" stroke-width=".7"/>
+            <rect x="155" y="152" width="24" height="22" rx="4" fill="#dc2626"/>
+            <text x="167" y="168" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="system-ui,sans-serif">F</text>
+            <text x="25" y="167" font-size="7" font-weight="800" fill="rgba(255,255,255,.45)" font-family="system-ui,sans-serif">04</text>
+            <text x="40" y="167" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.52)" font-family="system-ui,sans-serif">Memphis, TN</text>
+
+            <!-- subtle animated dots -->
+            <circle cx="8" cy="64" r="2" fill="rgba(255,255,255,.3)"><animate attributeName="opacity" values="1;.2;1" dur="2.2s" repeatCount="indefinite"/></circle>
+            <circle cx="192" cy="118" r="2" fill="rgba(255,255,255,.25)"><animate attributeName="opacity" values=".6;.1;.6" dur="3s" repeatCount="indefinite"/></circle>
+            <circle cx="8" cy="158" r="1.5" fill="rgba(255,255,255,.2)"><animate attributeName="opacity" values=".4;.1;.4" dur="2.7s" repeatCount="indefinite"/></circle>
+        </svg>
+    </div>
+
+    <!-- content -->
+    <div class="relative z-10 w-full mx-auto max-w-7xl px-5 sm:px-8" style="padding-top:2rem;padding-bottom:3rem;">
+
+        <!-- badge -->
+        <div class="inline-flex items-center gap-2.5" style="background:rgba(255,255,255,.65);border:1px solid rgba(6,52,15,.2);border-radius:8px;padding:6px 14px;margin-bottom:24px">
+            <span style="width:7px;height:7px;border-radius:50%;background:#15803d;box-shadow:0 0 7px rgba(21,128,61,.7)"></span>
+            <span style="font-size:10.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#15691a">US City Safety Rankings</span>
+        </div>
+
+        <!-- heading -->
+        <h1 class="font-display" style="font-size:clamp(40px,4.5vw,72px);font-weight:900;line-height:1.03;letter-spacing:-.02em;color:#06340f;margin-bottom:20px">
+            Find the<br>
+            <span style="color:#ffffff">Safest Areas</span>
+        </h1>
+
+        <!-- subtitle -->
+        <p style="font-size:17px;line-height:1.65;color:rgba(6,52,15,.78);max-width:32rem;margin-bottom:28px">
+            Letter-grade safety rankings for <strong style="font-weight:800;color:#06340f"><span id="cg-s-cities">125</span>+</strong> US cities — transparent, data-driven, and updated annually.
+        </p>
+
+        <!-- Download badges -->
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px">
+            <a href="#" style="display:inline-flex;transition:transform .15s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'"><img src="/images/app-store-badge.png" alt="Download on the App Store" style="height:52px;width:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.18)" /></a>
+            <a href="#" style="display:inline-flex;transition:transform .15s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'"><img src="/images/google-play-badge.png" alt="Get it on Google Play" style="height:52px;width:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.18)" /></a>
+        </div>
+
+        <!-- 4-col stats -->
+        <dl class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5 max-w-xl mb-8">
+            <div>
+                <dt class="font-display text-2xl font-bold tracking-tight text-white">1-tap</dt>
+                <dd class="mt-1 font-mono text-[10.5px] uppercase tracking-[.18em] text-white/50">accept dispatch</dd>
+            </div>
+            <div>
+                <dt class="font-display text-2xl font-bold tracking-tight text-white">Live</dt>
+                <dd class="mt-1 font-mono text-[10.5px] uppercase tracking-[.18em] text-white/50">turn-by-turn</dd>
+            </div>
+            <div>
+                <dt class="font-display text-2xl font-bold tracking-tight text-white">Encrypted</dt>
+                <dd class="mt-1 font-mono text-[10.5px] uppercase tracking-[.18em] text-white/50">officer channel</dd>
+            </div>
+            <div>
+                <dt class="font-display text-2xl font-bold tracking-tight text-white">Offline</dt>
+                <dd class="mt-1 font-mono text-[10.5px] uppercase tracking-[.18em] text-white/50">incident capture</dd>
+            </div>
+        </dl>
+
+        <!-- Social proof -->
+        <div class="max-w-xl">
+            <div class="flex items-center gap-4">
+                <div class="flex items-center -space-x-3 shrink-0">
+                    <img src="/images/officer-1.jpg" alt="" class="w-10 h-10 rounded-full ring-2 ring-red-900/60 object-cover" />
+                    <img src="/images/officer-2.jpg" alt="" class="w-10 h-10 rounded-full ring-2 ring-red-900/60 object-cover" />
+                    <img src="/images/officer-3.jpg" alt="" class="w-10 h-10 rounded-full ring-2 ring-red-900/60 object-cover" />
+                    <img src="/images/officer-4.jpg" alt="" class="w-10 h-10 rounded-full ring-2 ring-red-900/60 object-cover" />
+                    <span class="w-10 h-10 grid place-items-center rounded-full ring-2 ring-red-900/60 bg-emerald-500 text-white font-display font-bold text-[11px]">5K</span>
+                </div>
+                <p class="font-display text-base font-semibold text-white">5,000+ Verified Officers</p>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed max-w-md text-white/65">
+                Over 5,000 sworn officers across 30+ departments are answering faster — thanks to Auxilio Agente.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ── GRADE LEGEND ── -->
+<div id="cg-legend-bar" class="sticky top-[78px] z-30 border-b border-slate-100 shadow-sm" style="background:#fff;backdrop-filter:blur(12px)">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 py-4">
+        <div class="flex flex-wrap items-center gap-3">
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[.2em] shrink-0">Grade Scale</p>
+
+            <!-- Grade A -->
+            <div class="cg-legend-item flex items-center gap-2 rounded-xl px-3.5 py-2.5 cursor-pointer"
+                 data-g="A"
+                 onclick="cgLegFilter('A')"
+                 style="background:#22A62028;border:1.5px solid #22A62080;">
+                <span class="cg-grade-b shrink-0 legend-badge" style="background:#22A62045;color:#15691a;border:1.5px solid #22A620aa;width:30px;height:30px;border-radius:8px;font-size:14px;font-weight:900;">A</span>
+                <div class="min-w-0">
+                    <p class="text-[11.5px] font-bold leading-none legend-label" style="color:#15691a">Safest 20%</p>
+                    <p class="text-[10px] mt-0.5 legend-sub" style="color:rgba(71,85,105,.6)">Decile 9–10</p>
+                </div>
+            </div>
+
+            <!-- Grade B -->
+            <div class="cg-legend-item flex items-center gap-2 rounded-xl px-3.5 py-2.5 cursor-pointer"
+                 data-g="B"
+                 onclick="cgLegFilter('B')"
+                 style="background:#399CD828;border:1.5px solid #399CD880;">
+                <span class="cg-grade-b shrink-0 legend-badge" style="background:#399CD845;color:#1d6fa5;border:1.5px solid #399CD8aa;width:30px;height:30px;border-radius:8px;font-size:14px;font-weight:900;">B</span>
+                <div class="min-w-0">
+                    <p class="text-[11.5px] font-bold leading-none legend-label" style="color:#1d6fa5">Below avg</p>
+                    <p class="text-[10px] mt-0.5 legend-sub" style="color:rgba(71,85,105,.6)">Decile 7–8</p>
+                </div>
+            </div>
+
+            <!-- Grade C -->
+            <div class="cg-legend-item flex items-center gap-2 rounded-xl px-3.5 py-2.5 cursor-pointer"
+                 data-g="C"
+                 onclick="cgLegFilter('C')"
+                 style="background:#F1B72C28;border:1.5px solid #F1B72C80;">
+                <span class="cg-grade-b shrink-0 legend-badge" style="background:#F1B72C45;color:#9a7510;border:1.5px solid #F1B72Caa;width:30px;height:30px;border-radius:8px;font-size:14px;font-weight:900;">C</span>
+                <div class="min-w-0">
+                    <p class="text-[11.5px] font-bold leading-none legend-label" style="color:#9a7510">Near avg</p>
+                    <p class="text-[10px] mt-0.5 legend-sub" style="color:rgba(71,85,105,.6)">Decile 5–6</p>
+                </div>
+            </div>
+
+            <!-- Grade D -->
+            <div class="cg-legend-item flex items-center gap-2 rounded-xl px-3.5 py-2.5 cursor-pointer"
+                 data-g="D"
+                 onclick="cgLegFilter('D')"
+                 style="background:#EE772828;border:1.5px solid #EE772880;">
+                <span class="cg-grade-b shrink-0 legend-badge" style="background:#EE772845;color:#b4521a;border:1.5px solid #EE7728aa;width:30px;height:30px;border-radius:8px;font-size:14px;font-weight:900;">D</span>
+                <div class="min-w-0">
+                    <p class="text-[11.5px] font-bold leading-none legend-label" style="color:#b4521a">Above avg</p>
+                    <p class="text-[10px] mt-0.5 legend-sub" style="color:rgba(71,85,105,.6)">Decile 3–4</p>
+                </div>
+            </div>
+
+            <!-- Grade F -->
+            <div class="cg-legend-item flex items-center gap-2 rounded-xl px-3.5 py-2.5 cursor-pointer"
+                 data-g="F"
+                 onclick="cgLegFilter('F')"
+                 style="background:#E6201A28;border:1.5px solid #E6201A80;">
+                <span class="cg-grade-b shrink-0 legend-badge" style="background:#E6201A45;color:#a8120d;border:1.5px solid #E6201Aaa;width:30px;height:30px;border-radius:8px;font-size:14px;font-weight:900;">F</span>
+                <div class="min-w-0">
+                    <p class="text-[11.5px] font-bold leading-none legend-label" style="color:#a8120d">Highest crime</p>
+                    <p class="text-[10px] mt-0.5 legend-sub" style="color:rgba(71,85,105,.6)">Decile 1–2</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ── MAIN SECTION ── -->
+<section id="cg-main-section" class="min-h-screen" style="background:#f8fafc">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 py-10">
+
+        <!-- STATE GRID VIEW (default) -->
+        <div id="cg-states-view">
+
+            <!-- Interactive US Map -->
+            <div id="cg-map-wrap" style="position:relative;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;margin-bottom:32px;padding:18px 20px 14px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.06)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                    <p style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.18em;text-transform:uppercase">Crime Grade Map · Click a state to explore</p>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <span style="display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#22A620"><span style="width:8px;height:8px;border-radius:2px;background:#22A620;display:inline-block"></span>A</span>
+                        <span style="display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#399CD8"><span style="width:8px;height:8px;border-radius:2px;background:#399CD8;display:inline-block"></span>B</span>
+                        <span style="display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#F1B72C"><span style="width:8px;height:8px;border-radius:2px;background:#F1B72C;display:inline-block"></span>C</span>
+                        <span style="display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#EE7728"><span style="width:8px;height:8px;border-radius:2px;background:#EE7728;display:inline-block"></span>D</span>
+                        <span style="display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#E6201A"><span style="width:8px;height:8px;border-radius:2px;background:#E6201A;display:inline-block"></span>F</span>
+                    </div>
+                </div>
+                <div id="cg-map-loading" style="display:flex;align-items:center;justify-content:center;height:300px;color:#94a3b8;font-size:12px;gap:8px">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" style="animation:cgMapSpin 1s linear infinite;flex-shrink:0"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-opacity=".2"/><path d="M21 12a9 9 0 00-9-9"/></svg>
+                    Loading map…
+                </div>
+                <svg id="cg-us-map-svg" style="display:none;width:100%;border-radius:6px"></svg>
+                <div id="cg-map-tooltip" style="position:absolute;pointer-events:none;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:9px;padding:9px 13px;font-size:12px;color:#0f172a;display:none;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.12);white-space:nowrap;line-height:1.5"></div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-7">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">All States</h2>
+                    <p class="text-xs mt-0.5 text-slate-400">Select a state to explore city crime grades</p>
+                </div>
+                <div class="sm:ml-auto relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style="color:#94a3b8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+                    <input id="cg-state-search" class="cg-search" style="padding-left:36px;width:210px" placeholder="Search state…" oninput="cgFilterStates()" />
+                </div>
+            </div>
+            <div id="cg-state-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px"></div>
+        </div>
+
+        <!-- CITY TABLE VIEW (drill-down) -->
+        <div id="cg-cities-view" style="display:none">
+            <!-- Breadcrumb -->
+            <div class="flex items-center gap-3 mb-6">
+                <button onclick="cgBackToStates()" class="inline-flex items-center gap-2 text-sm font-semibold transition" style="background:#f1f5f9;border:1px solid rgba(0,0,0,.1);color:#475569;padding:7px 14px;border-radius:4px;cursor:pointer">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    All States
+                </button>
+                <span class="text-slate-300">/</span>
+                <span class="text-slate-800 font-semibold text-sm" id="cg-state-label">California</span>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex flex-wrap items-center gap-2.5 mb-5">
+                <div class="cg-search-wrap">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+                    <input class="cg-search" id="cg-search" placeholder="Search city…" oninput="cgGoPage(1);cgCheckReset()" />
+                </div>
+                <select class="cg-sel" id="cg-grade-f" onchange="cgGoPage(1);cgCheckReset()">
+                    <option value="">All grades</option>
+                    <option value="A">A — Safest</option>
+                    <option value="B">B — Below avg</option>
+                    <option value="C">C — Near avg</option>
+                    <option value="D">D — Above avg</option>
+                    <option value="F">F — High crime</option>
+                </select>
+                <select class="cg-sel" id="cg-size-f" onchange="cgGoPage(1);cgCheckReset()">
+                    <option value="">All sizes</option>
+                    <option value="mega">Mega (1M+)</option>
+                    <option value="large">Large (500k–1M)</option>
+                    <option value="medium">Medium (100k–500k)</option>
+                    <option value="small">Smaller (&lt;100k)</option>
+                </select>
+                <button class="cg-reset-btn" id="cg-reset-btn" onclick="cgReset()">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 3v5h5"/></svg>
+                    Reset
+                </button>
+                <span class="ml-auto text-xs text-slate-500 font-medium" id="cg-count"></span>
+            </div>
+
+            <!-- Table card -->
+            <div class="overflow-hidden border border-slate-200" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.07);border-radius:8px">
+                <div class="cg-tbl-wrap">
+                    <table class="cg-tbl">
+                        <thead>
+                            <tr>
+                                <th onclick="cgSort('rank')"># <span id="cg-a-rank">↕</span></th>
+                                <th onclick="cgSort('city')">City <span id="cg-a-city">↕</span></th>
+                                <th onclick="cgSort('grade')">Grade <span id="cg-a-grade">↕</span></th>
+                                <th onclick="cgSort('decile')">Decile <span id="cg-a-decile">↕</span></th>
+                                <th onclick="cgSort('violent')">Violent /100k <span id="cg-a-violent">↕</span></th>
+                                <th onclick="cgSort('property')">Property /100k <span id="cg-a-property">↕</span></th>
+                                <th onclick="cgSort('murder')">Murder /100k <span id="cg-a-murder">↕</span></th>
+                                <th onclick="cgSort('total')">Total /100k <span id="cg-a-total">↕</span></th>
+                                <th>Pop.</th>
+                                <th>Trend</th>
+                                <th>Analysis</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cg-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="px-5 py-4 flex flex-wrap items-center gap-2" style="border-top:1px solid rgba(0,0,0,.07)" id="cg-pg"></div>
+            </div>
+        </div>
+
+        <!-- AI Panel -->
+        <div class="cg-ai-panel" id="cg-ai-panel">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="grid place-items-center w-7 h-7 rounded-full flex-shrink-0" style="background:linear-gradient(135deg,#E24B4A,#ff8c42)">
+                    <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.7 5.6 5.6 1.7-5.6 1.7L12 16.6l-1.7-5.6-5.6-1.7 5.6-1.7L12 2z"/></svg>
+                </span>
+                <p class="text-sm font-bold text-slate-800 flex-1" id="cg-ai-title">City Analysis</p>
+                <span class="text-[10px] font-semibold rounded-full px-2.5 py-1" style="background:rgba(226,75,74,.1);color:#E24B4A">2024 Final</span>
+                <button onclick="document.getElementById('cg-ai-panel').classList.remove('cg-show')" class="grid place-items-center w-6 h-6 rounded-full text-slate-400 hover:text-slate-700 transition" style="background:rgba(0,0,0,.06)">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed" id="cg-ai-body">Loading…</p>
+        </div>
+
+        <p class="mt-8 text-xs leading-relaxed max-w-4xl text-slate-400">
+            <strong class="text-slate-500">Source:</strong> FBI Uniform Crime Reporting (UCR) Program, 2024 — final annual data released August 2025. Covers 120+ major US cities. Grades computed by decile rank among all cities in the dataset (violent crime weighted 60%, property 40%). The FBI recommends against city rankings for policy decisions; this data is provided for public awareness only.
+        </p>
+    </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+'use strict';
+var CG_RAW=[
+  {city:'Los Angeles',state:'CA',pop:3900000,violent:320,property:2410,murder:4.8,trend:'dn'},
+  {city:'Chicago',state:'IL',pop:2700000,violent:388,property:2620,murder:13.4,trend:'dn'},
+  {city:'Houston',state:'TX',pop:2300000,violent:1148,property:4293,murder:9.8,trend:'dn'},
+  {city:'Phoenix',state:'AZ',pop:1620000,violent:338,property:2980,murder:5.4,trend:'dn'},
+  {city:'Philadelphia',state:'PA',pop:1570000,violent:516,property:2580,murder:17.8,trend:'dn'},
+  {city:'San Antonio',state:'TX',pop:1430000,violent:622,property:4676,murder:7.1,trend:'dn'},
+  {city:'San Diego',state:'CA',pop:1390000,violent:248,property:2280,murder:2.8,trend:'dn'},
+  {city:'Dallas',state:'TX',pop:1304000,violent:810,property:3980,murder:9.2,trend:'dn'},
+  {city:'San Jose',state:'CA',pop:1015000,violent:242,property:2180,murder:3.1,trend:'dn'},
+  {city:'New York',state:'NY',pop:8300000,violent:580,property:1620,murder:4.2,trend:'dn'},
+  {city:'Austin',state:'TX',pop:978000,violent:298,property:2640,murder:3.9,trend:'dn'},
+  {city:'Jacksonville',state:'FL',pop:954000,violent:690,property:3800,murder:12.1,trend:'dn'},
+  {city:'Fort Worth',state:'TX',pop:927000,violent:410,property:3210,murder:5.1,trend:'dn'},
+  {city:'Columbus',state:'OH',pop:905000,violent:612,property:3460,murder:10.4,trend:'dn'},
+  {city:'Charlotte',state:'NC',pop:898000,violent:488,property:2940,murder:7.2,trend:'dn'},
+  {city:'Indianapolis',state:'IN',pop:887000,violent:1240,property:4120,murder:22.8,trend:'dn'},
+  {city:'San Francisco',state:'CA',pop:874000,violent:490,property:3929,murder:5.4,trend:'dn'},
+  {city:'Seattle',state:'WA',pop:750000,violent:402,property:5008,murder:3.1,trend:'dn'},
+  {city:'Denver',state:'CO',pop:715000,violent:410,property:4762,murder:6.2,trend:'dn'},
+  {city:'Nashville',state:'TN',pop:694000,violent:742,property:3890,murder:10.1,trend:'dn'},
+  {city:'Oklahoma City',state:'OK',pop:681000,violent:780,property:4180,murder:8.4,trend:'dn'},
+  {city:'El Paso',state:'TX',pop:678000,violent:255,property:1760,murder:2.2,trend:'dn'},
+  {city:'Washington D.C.',state:'DC',pop:670000,violent:748,property:3620,murder:22.1,trend:'dn'},
+  {city:'Las Vegas',state:'NV',pop:650000,violent:590,property:3240,murder:8.2,trend:'dn'},
+  {city:'Louisville',state:'KY',pop:633000,violent:780,property:3640,murder:14.6,trend:'dn'},
+  {city:'Memphis',state:'TN',pop:620000,violent:2501,property:6899,murder:40.6,trend:'dn'},
+  {city:'Baltimore',state:'MD',pop:579000,violent:1380,property:4157,murder:34.8,trend:'dn'},
+  {city:'Milwaukee',state:'WI',pop:576000,violent:1180,property:3240,murder:19.4,trend:'dn'},
+  {city:'Albuquerque',state:'NM',pop:562000,violent:1182,property:4629,murder:9.4,trend:'dn'},
+  {city:'Tucson',state:'AZ',pop:546000,violent:780,property:4120,murder:6.8,trend:'dn'},
+  {city:'Fresno',state:'CA',pop:540000,violent:760,property:3890,murder:8.1,trend:'dn'},
+  {city:'Mesa',state:'AZ',pop:504000,violent:310,property:2640,murder:3.8,trend:'dn'},
+  {city:'Sacramento',state:'CA',pop:524000,violent:720,property:3780,murder:8.4,trend:'dn'},
+  {city:'Atlanta',state:'GA',pop:500000,violent:1379,property:4800,murder:24.0,trend:'flat'},
+  {city:'Kansas City',state:'MO',pop:496000,violent:1580,property:4980,murder:30.1,trend:'dn'},
+  {city:'Omaha',state:'NE',pop:486000,violent:520,property:3120,murder:7.6,trend:'dn'},
+  {city:'Colorado Springs',state:'CO',pop:478000,violent:410,property:3480,murder:4.2,trend:'dn'},
+  {city:'Raleigh',state:'NC',pop:476000,violent:320,property:2680,murder:4.1,trend:'dn'},
+  {city:'Long Beach',state:'CA',pop:457000,violent:440,property:2940,murder:6.2,trend:'dn'},
+  {city:'Virginia Beach',state:'VA',pop:450000,violent:198,property:2010,murder:3.2,trend:'dn'},
+  {city:'Minneapolis',state:'MN',pop:425000,violent:898,property:3980,murder:12.5,trend:'dn'},
+  {city:'New Orleans',state:'LA',pop:383000,violent:1350,property:4100,murder:38.2,trend:'flat'},
+  {city:'Tampa',state:'FL',pop:394000,violent:580,property:3150,murder:7.9,trend:'dn'},
+  {city:'Arlington',state:'TX',pop:392000,violent:380,property:3020,murder:4.8,trend:'dn'},
+  {city:'Bakersfield',state:'CA',pop:380000,violent:620,property:3580,murder:7.2,trend:'dn'},
+  {city:'Wichita',state:'KS',pop:396000,violent:680,property:3840,murder:7.9,trend:'dn'},
+  {city:'Aurora',state:'CO',pop:389000,violent:542,property:4180,murder:6.4,trend:'dn'},
+  {city:'Oakland',state:'CA',pop:440000,violent:1925,property:7230,murder:19.8,trend:'dn'},
+  {city:'St. Louis',state:'MO',pop:285000,violent:1610,property:5707,murder:26.4,trend:'dn'},
+  {city:'Boston',state:'MA',pop:675000,violent:312,property:2150,murder:4.1,trend:'dn'},
+  {city:'Portland',state:'OR',pop:636000,violent:720,property:4850,murder:6.4,trend:'dn'},
+  {city:'Detroit',state:'MI',pop:632000,violent:1781,property:4340,murder:28.6,trend:'dn'},
+  {city:'Cincinnati',state:'OH',pop:310000,violent:1035,property:3820,murder:24.0,trend:'dn'},
+  {city:'Pittsburgh',state:'PA',pop:304000,violent:680,property:2940,murder:13.2,trend:'dn'},
+  {city:'Lexington',state:'KY',pop:323000,violent:380,property:2980,murder:5.4,trend:'dn'},
+  {city:'Anchorage',state:'AK',pop:291000,violent:980,property:4180,murder:5.4,trend:'dn'},
+  {city:'Stockton',state:'CA',pop:320000,violent:940,property:3960,murder:11.8,trend:'dn'},
+  {city:'Corpus Christi',state:'TX',pop:317000,violent:480,property:3480,murder:4.8,trend:'dn'},
+  {city:'St. Paul',state:'MN',pop:308000,violent:780,property:3640,murder:8.2,trend:'dn'},
+  {city:'Toledo',state:'OH',pop:270000,violent:880,property:3820,murder:15.2,trend:'dn'},
+  {city:'Greensboro',state:'NC',pop:296000,violent:520,property:2980,murder:8.9,trend:'dn'},
+  {city:'Newark',state:'NJ',pop:311000,violent:880,property:2720,murder:12.4,trend:'dn'},
+  {city:'Plano',state:'TX',pop:285000,violent:214,property:1890,murder:2.0,trend:'dn'},
+  {city:'Henderson',state:'NV',pop:332000,violent:195,property:1640,murder:1.8,trend:'dn'},
+  {city:'Orlando',state:'FL',pop:307000,violent:620,property:3740,murder:8.4,trend:'flat'},
+  {city:'Chandler',state:'AZ',pop:270000,violent:192,property:1980,murder:1.6,trend:'dn'},
+  {city:'St. Petersburg',state:'FL',pop:263000,violent:498,property:3020,murder:6.2,trend:'dn'},
+  {city:'Laredo',state:'TX',pop:258000,violent:320,property:2980,murder:2.8,trend:'dn'},
+  {city:'Norfolk',state:'VA',pop:237000,violent:680,property:2840,murder:12.1,trend:'dn'},
+  {city:'Madison',state:'WI',pop:269000,violent:298,property:2480,murder:2.8,trend:'dn'},
+  {city:'Durham',state:'NC',pop:283000,violent:680,property:3240,murder:12.4,trend:'dn'},
+  {city:'Lubbock',state:'TX',pop:258000,violent:780,property:4280,murder:7.4,trend:'dn'},
+  {city:'Winston-Salem',state:'NC',pop:248000,violent:580,property:3120,murder:10.4,trend:'dn'},
+  {city:'Garland',state:'TX',pop:240000,violent:310,property:2640,murder:3.8,trend:'dn'},
+  {city:'Glendale',state:'AZ',pop:250000,violent:390,property:2980,murder:4.1,trend:'dn'},
+  {city:'Hialeah',state:'FL',pop:224000,violent:210,property:2120,murder:2.4,trend:'dn'},
+  {city:'Reno',state:'NV',pop:264000,violent:640,property:3840,murder:5.8,trend:'dn'},
+  {city:'Baton Rouge',state:'LA',pop:225000,violent:1120,property:4080,murder:28.4,trend:'dn'},
+  {city:'Irvine',state:'CA',pop:307000,violent:112,property:1180,murder:0.6,trend:'dn'},
+  {city:'Chesapeake',state:'VA',pop:244000,violent:218,property:2140,murder:3.4,trend:'dn'},
+  {city:'Irving',state:'TX',pop:239000,violent:320,property:2980,murder:3.6,trend:'dn'},
+  {city:'Scottsdale',state:'AZ',pop:241000,violent:162,property:1580,murder:1.4,trend:'dn'},
+  {city:'North Las Vegas',state:'NV',pop:274000,violent:480,property:3120,murder:5.2,trend:'dn'},
+  {city:'Fremont',state:'CA',pop:230000,violent:148,property:1320,murder:1.1,trend:'dn'},
+  {city:'Gilbert',state:'AZ',pop:267000,violent:102,property:1050,murder:0.9,trend:'dn'},
+  {city:'San Bernardino',state:'CA',pop:218000,violent:920,property:4280,murder:14.2,trend:'dn'},
+  {city:'Birmingham',state:'AL',pop:213000,violent:1680,property:4920,murder:38.1,trend:'dn'},
+  {city:'Rochester',state:'NY',pop:211000,violent:980,property:3480,murder:16.8,trend:'dn'},
+  {city:'Richmond',state:'VA',pop:227000,violent:820,property:3280,murder:18.2,trend:'dn'},
+  {city:'Spokane',state:'WA',pop:228000,violent:540,property:4280,murder:4.8,trend:'dn'},
+  {city:'Des Moines',state:'IA',pop:214000,violent:640,property:3640,murder:9.8,trend:'dn'},
+  {city:'Montgomery',state:'AL',pop:200000,violent:1180,property:4520,murder:24.8,trend:'dn'},
+  {city:'Modesto',state:'CA',pop:215000,violent:680,property:3840,murder:8.4,trend:'dn'},
+  {city:'Fayetteville',state:'NC',pop:208000,violent:820,property:3640,murder:12.4,trend:'dn'},
+  {city:'Tacoma',state:'WA',pop:219000,violent:620,property:4280,murder:6.4,trend:'dn'},
+  {city:'Akron',state:'OH',pop:190000,violent:880,property:3640,murder:18.2,trend:'dn'},
+  {city:'Little Rock',state:'AR',pop:198000,violent:1380,property:5120,murder:28.4,trend:'dn'},
+  {city:'Salt Lake City',state:'UT',pop:200000,violent:620,property:4280,murder:5.4,trend:'dn'},
+  {city:'Huntsville',state:'AL',pop:210000,violent:540,property:3480,murder:8.1,trend:'dn'},
+  {city:'Tallahassee',state:'FL',pop:198000,violent:780,property:4120,murder:10.4,trend:'dn'},
+  {city:'Cape Coral',state:'FL',pop:220000,violent:198,property:1840,murder:2.4,trend:'dn'},
+  {city:'Tempe',state:'AZ',pop:190000,violent:420,property:3280,murder:4.8,trend:'dn'},
+  {city:'Overland Park',state:'KS',pop:196000,violent:158,property:2040,murder:1.8,trend:'dn'},
+  {city:'Naperville',state:'IL',pop:150000,violent:89,property:920,murder:0.8,trend:'dn'},
+  {city:'Carmel',state:'IN',pop:102000,violent:66,property:813,murder:0.5,trend:'dn'},
+  {city:'Frisco',state:'TX',pop:200000,violent:120,property:1480,murder:0.9,trend:'dn'},
+  {city:'Riverside',state:'CA',pop:314000,violent:380,property:2840,murder:4.2,trend:'dn'},
+  {city:'Anaheim',state:'CA',pop:346000,violent:298,property:2380,murder:2.8,trend:'dn'},
+  {city:'Santa Ana',state:'CA',pop:310000,violent:320,property:2280,murder:3.2,trend:'dn'},
+  {city:'Fort Wayne',state:'IN',pop:265000,violent:480,property:3120,murder:8.4,trend:'dn'},
+  {city:'Jackson',state:'MS',pop:153000,violent:1840,property:5120,murder:48.2,trend:'dn'},
+  {city:'Shreveport',state:'LA',pop:181000,violent:1480,property:5240,murder:32.4,trend:'dn'},
+  {city:'Flint',state:'MI',pop:96000,violent:1620,property:4480,murder:34.2,trend:'dn'},
+  {city:'Miami',state:'FL',pop:462000,violent:680,property:3600,murder:9.4,trend:'flat'},
+  {city:'Providence',state:'RI',pop:190000,violent:620,property:2980,murder:6.4,trend:'dn'},
+  {city:'Grand Rapids',state:'MI',pop:198000,violent:720,property:3280,murder:8.4,trend:'dn'},
+  {city:'Knoxville',state:'TN',pop:190000,violent:920,property:4480,murder:10.8,trend:'dn'},
+  {city:'Worcester',state:'MA',pop:186000,violent:380,property:2140,murder:4.8,trend:'dn'},
+  {city:'Fort Lauderdale',state:'FL',pop:182000,violent:580,property:4120,murder:8.4,trend:'dn'},
+  {city:'Aurora',state:'IL',pop:180000,violent:310,property:2480,murder:4.2,trend:'dn'},
+  {city:'Oxnard',state:'CA',pop:210000,violent:360,property:2280,murder:4.2,trend:'dn'},
+  {city:'Fontana',state:'CA',pop:212000,violent:320,property:2180,murder:3.6,trend:'dn'},
+  {city:'Glendale',state:'CA',pop:202000,violent:168,property:1940,murder:1.4,trend:'dn'},
+  {city:'Huntington Beach',state:'CA',pop:198000,violent:224,property:2080,murder:2.1,trend:'dn'},
+  {city:'Pasadena',state:'CA',pop:138000,violent:282,property:2480,murder:2.8,trend:'dn'}
+];
+
+var GC={A:{bg:'#22A620',tx:'#ffffff'},B:{bg:'#399CD8',tx:'#ffffff'},C:{bg:'#F1B72C',tx:'#3a2c05'},D:{bg:'#EE7728',tx:'#ffffff'},F:{bg:'#E6201A',tx:'#ffffff'}};
+var CG_MAP_GRADE={A:'#22A620',B:'#399CD8',C:'#F1B72C',D:'#EE7728',F:'#E6201A'};
+var LEGEND_COLORS={
+  A:{fill:'#22A620',g1:'#15691a',gradient:'linear-gradient(135deg,#15691a,#22A620)',glow:'rgba(34,166,32,.45)'},
+  B:{fill:'#399CD8',g1:'#1d6fa5',gradient:'linear-gradient(135deg,#1d6fa5,#399CD8)',glow:'rgba(57,156,216,.45)'},
+  C:{fill:'#F1B72C',g1:'#9a7510',gradient:'linear-gradient(135deg,#9a7510,#F1B72C)',glow:'rgba(241,183,44,.45)'},
+  D:{fill:'#EE7728',g1:'#b4521a',gradient:'linear-gradient(135deg,#b4521a,#EE7728)',glow:'rgba(238,119,40,.45)'},
+  F:{fill:'#E6201A',g1:'#a8120d',gradient:'linear-gradient(135deg,#a8120d,#E6201A)',glow:'rgba(230,32,26,.45)'}
+};
+var cgLegActive='';
+function cgLegFilter(g){
+  if(cgLegActive===g){cgLegActive='';g='';}else{cgLegActive=g;}
+  var gf=document.getElementById('cg-grade-f');if(gf)gf.value=cgLegActive;
+  document.querySelectorAll('.cg-legend-item').forEach(function(el){
+    var eg=el.getAttribute('data-g');
+    var c=LEGEND_COLORS[eg];if(!c)return;
+    var badge=el.querySelector('.legend-badge');
+    var label=el.querySelector('.legend-label');
+    var sub=el.querySelector('.legend-sub');
+    if(cgLegActive&&eg===cgLegActive){
+      el.style.background=c.gradient;
+      el.style.borderColor='transparent';
+      el.style.boxShadow='none';
+      el.classList.add('cg-legend-active');
+      if(badge){badge.style.background='rgba(255,255,255,.22)';badge.style.color='#fff';badge.style.borderColor='rgba(255,255,255,.4)';}
+      if(label)label.style.color='#fff';
+      if(sub)sub.style.color='rgba(255,255,255,.65)';
+    } else if(cgLegActive&&eg!==cgLegActive){
+      el.style.background=c.fill+'14';
+      el.style.border='1.5px solid '+c.fill+'40';
+      el.style.boxShadow='';
+      el.classList.remove('cg-legend-active');
+      if(badge){badge.style.background=c.fill+'20';badge.style.color=c.fill+'99';badge.style.borderColor=c.fill+'50';}
+      if(label)label.style.color=c.fill+'88';
+      if(sub)sub.style.color='rgba(71,85,105,.35)';
+    } else {
+      el.style.background=c.fill+'28';
+      el.style.borderColor=c.fill+'80';
+      el.style.border='1.5px solid '+c.fill+'80';
+      el.style.boxShadow='';
+      el.classList.remove('cg-legend-active');
+      if(badge){badge.style.background=c.fill+'45';badge.style.color=c.g1||c.fill;badge.style.borderColor=c.fill+'aa';}
+      if(label)label.style.color=c.g1||c.fill;
+      if(sub)sub.style.color='rgba(71,85,105,.6)';
+    }
+  });
+  if(typeof cgGoPage==='function')cgGoPage(1);
+  if(typeof cgCheckReset==='function')cgCheckReset();
+}
+var DC=['#E24B4A','#E24B4A','#D85A30','#EF9F27','#BA7517','#378ADD','#1D9E75','#1D9E75','#639922','#639922'];
+
+function cgBuildGrades(data){
+  var sc=data.map(function(d){return Object.assign({},d,{score:d.violent*0.6+d.property*0.4,total:d.violent+d.property});});
+  sc.sort(function(a,b){return a.score-b.score;});
+  var n=sc.length;
+  return sc.map(function(d,i){
+    var decile=Math.min(10,Math.ceil((i+1)/n*10));
+    var grade='F';
+    if(decile>=9)grade='A'; else if(decile>=7)grade='B'; else if(decile>=5)grade='C'; else if(decile>=3)grade='D';
+    return Object.assign({},d,{decile:decile,grade:grade,rank:i+1});
+  });
+}
+
+var CG_ALL=cgBuildGrades(CG_RAW);
+var CG_MAX_V=Math.max.apply(null,CG_ALL.map(function(d){return d.violent;}));
+var CG_MAX_P=Math.max.apply(null,CG_ALL.map(function(d){return d.property;}));
+document.getElementById('cg-s-cities').textContent=CG_ALL.length;
+
+var STATE_NAMES={AK:'Alaska',AL:'Alabama',AR:'Arkansas',AZ:'Arizona',CA:'California',CO:'Colorado',CT:'Connecticut',DC:'Wash. D.C.',DE:'Delaware',FL:'Florida',GA:'Georgia',HI:'Hawaii',IA:'Iowa',ID:'Idaho',IL:'Illinois',IN:'Indiana',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',MA:'Massachusetts',MD:'Maryland',ME:'Maine',MI:'Michigan',MN:'Minnesota',MO:'Missouri',MS:'Mississippi',MT:'Montana',NC:'North Carolina',ND:'North Dakota',NE:'Nebraska',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NV:'Nevada',NY:'New York',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VA:'Virginia',VT:'Vermont',WA:'Washington',WI:'Wisconsin',WV:'West Virginia',WY:'Wyoming'};
+
+var STATE_COLORS={
+  AK:'#002868',AL:'#BF0A30',AR:'#BF0A30',AZ:'#002868',CA:'#003776',
+  CO:'#003DA5',CT:'#002868',DC:'#E31C3D',DE:'#002868',FL:'#F15A22',
+  GA:'#003087',HI:'#002868',IA:'#002868',ID:'#003087',IL:'#003087',
+  IN:'#002868',KS:'#003087',KY:'#003087',LA:'#003087',MA:'#003087',
+  MD:'#E31C3D',ME:'#003087',MI:'#002868',MN:'#003087',MO:'#003087',
+  MS:'#BF0A30',MT:'#003087',NC:'#003087',ND:'#003087',NE:'#003087',
+  NH:'#003087',NJ:'#D4A017',NM:'#FFCC00',NV:'#002868',NY:'#003087',
+  OH:'#003087',OK:'#003087',OR:'#003087',PA:'#003087',RI:'#002868',
+  SC:'#003087',SD:'#003087',TN:'#BF0A30',TX:'#BF0A30',UT:'#003087',
+  VA:'#003087',VT:'#003087',WA:'#005C2E',WI:'#003087',WV:'#003087',WY:'#003087'
+};
+
+var STATE_FLAGS={
+  AK:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Flag_of_Alaska.svg/250px-Flag_of_Alaska.svg.png',
+  AL:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Alabama.svg/250px-Flag_of_Alabama.svg.png',
+  AR:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Flag_of_Arkansas.svg/250px-Flag_of_Arkansas.svg.png',
+  AZ:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Flag_of_Arizona.svg/250px-Flag_of_Arizona.svg.png',
+  CA:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Flag_of_California.svg/250px-Flag_of_California.svg.png',
+  CO:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Flag_of_Colorado.svg/250px-Flag_of_Colorado.svg.png',
+  CT:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Flag_of_Connecticut.svg/250px-Flag_of_Connecticut.svg.png',
+  DC:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Washington%2C_D.C.svg/250px-Flag_of_Washington%2C_D.C.svg.png',
+  DE:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Flag_of_Delaware.svg/250px-Flag_of_Delaware.svg.png',
+  FL:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Flag_of_Florida.svg/250px-Flag_of_Florida.svg.png',
+  GA:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Flag_of_the_State_of_Georgia.svg/250px-Flag_of_the_State_of_Georgia.svg.png',
+  HI:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Flag_of_Hawaii.svg/250px-Flag_of_Hawaii.svg.png',
+  IA:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Flag_of_Iowa.svg/250px-Flag_of_Iowa.svg.png',
+  ID:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_Idaho.svg/250px-Flag_of_Idaho.svg.png',
+  IL:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Flag_of_Illinois.svg/250px-Flag_of_Illinois.svg.png',
+  IN:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Flag_of_Indiana.svg/250px-Flag_of_Indiana.svg.png',
+  KS:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Flag_of_Kansas.svg/250px-Flag_of_Kansas.svg.png',
+  KY:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Flag_of_Kentucky.svg/250px-Flag_of_Kentucky.svg.png',
+  LA:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Flag_of_Louisiana.svg/250px-Flag_of_Louisiana.svg.png',
+  MA:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Flag_of_Massachusetts.svg/250px-Flag_of_Massachusetts.svg.png',
+  MD:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Flag_of_Maryland.svg/250px-Flag_of_Maryland.svg.png',
+  ME:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Flag_of_the_State_of_Maine.svg/250px-Flag_of_the_State_of_Maine.svg.png',
+  MI:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Flag_of_Michigan.svg/250px-Flag_of_Michigan.svg.png',
+  MN:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Flag_of_Minnesota.svg/250px-Flag_of_Minnesota.svg.png',
+  MO:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Flag_of_Missouri.svg/250px-Flag_of_Missouri.svg.png',
+  MS:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Flag_of_Mississippi.svg/250px-Flag_of_Mississippi.svg.png',
+  MT:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_Montana.svg/250px-Flag_of_Montana.svg.png',
+  NC:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Flag_of_North_Carolina.svg/250px-Flag_of_North_Carolina.svg.png',
+  ND:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Flag_of_North_Dakota.svg/250px-Flag_of_North_Dakota.svg.png',
+  NE:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Flag_of_Nebraska.svg/250px-Flag_of_Nebraska.svg.png',
+  NH:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Flag_of_New_Hampshire.svg/250px-Flag_of_New_Hampshire.svg.png',
+  NJ:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flag_of_New_Jersey.svg/250px-Flag_of_New_Jersey.svg.png',
+  NM:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_New_Mexico.svg/250px-Flag_of_New_Mexico.svg.png',
+  NV:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Flag_of_Nevada.svg/250px-Flag_of_Nevada.svg.png',
+  NY:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_New_York.svg/250px-Flag_of_New_York.svg.png',
+  OH:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Flag_of_Ohio.svg/250px-Flag_of_Ohio.svg.png',
+  OK:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Flag_of_Oklahoma.svg/250px-Flag_of_Oklahoma.svg.png',
+  OR:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Flag_of_Oregon.svg/250px-Flag_of_Oregon.svg.png',
+  PA:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Flag_of_Pennsylvania.svg/250px-Flag_of_Pennsylvania.svg.png',
+  RI:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Rhode_Island.svg/250px-Flag_of_Rhode_Island.svg.png',
+  SC:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Flag_of_South_Carolina.svg/250px-Flag_of_South_Carolina.svg.png',
+  SD:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_South_Dakota.svg/250px-Flag_of_South_Dakota.svg.png',
+  TN:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Tennessee.svg/250px-Flag_of_Tennessee.svg.png',
+  TX:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Flag_of_Texas.svg/250px-Flag_of_Texas.svg.png',
+  UT:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Flag_of_Utah.svg/250px-Flag_of_Utah.svg.png',
+  VA:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Flag_of_Virginia.svg/250px-Flag_of_Virginia.svg.png',
+  VT:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Vermont.svg/250px-Flag_of_Vermont.svg.png',
+  WA:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Flag_of_Washington.svg/250px-Flag_of_Washington.svg.png',
+  WI:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Flag_of_Wisconsin.svg/250px-Flag_of_Wisconsin.svg.png',
+  WV:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Flag_of_West_Virginia.svg/250px-Flag_of_West_Virginia.svg.png',
+  WY:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Wyoming.svg/250px-Flag_of_Wyoming.svg.png'
+};
+
+var cgSelectedState='';
+var cgSortKey='rank',cgSortDir=1,cgPage=1;
+var CG_PER=20;
+
+function cgFmtPop(p){return p>=1e6?(p/1e6).toFixed(1)+'M':(p/1000).toFixed(0)+'K';}
+function cgSizeOf(p){if(p>=1e6)return'mega';if(p>=5e5)return'large';if(p>=1e5)return'medium';return'small';}
+
+function cgGetFiltered(){
+  var se=document.getElementById('cg-search');
+  var q=se?(se.value||'').toLowerCase():'';
+  var gr=document.getElementById('cg-grade-f')?document.getElementById('cg-grade-f').value:'';
+  var sz=document.getElementById('cg-size-f')?document.getElementById('cg-size-f').value:'';
+  return CG_ALL.filter(function(d){
+    if(cgSelectedState&&d.state!==cgSelectedState)return false;
+    if(q&&!d.city.toLowerCase().includes(q)&&!d.state.toLowerCase().includes(q))return false;
+    if(gr&&d.grade!==gr)return false;
+    if(sz&&cgSizeOf(d.pop)!==sz)return false;
+    return true;
+  }).sort(function(a,b){
+    var av=a[cgSortKey],bv=b[cgSortKey];
+    if(typeof av==='string')return av.localeCompare(bv)*cgSortDir;
+    return(av-bv)*cgSortDir;
+  });
+}
+
+function cgSort(key){
+  if(cgSortKey===key)cgSortDir*=-1; else{cgSortKey=key;cgSortDir=1;}
+  ['rank','city','grade','decile','violent','property','murder','total'].forEach(function(k){
+    var el=document.getElementById('cg-a-'+k);
+    if(el)el.textContent=k===cgSortKey?(cgSortDir===1?'↑':'↓'):'↕';
+    if(el)el.style.color=k===cgSortKey?'#E24B4A':'#cbd5e1';
+  });
+  cgRender();
+}
+window.cgSort=cgSort;
+
+function cgGoPage(p){cgPage=p;cgRender();}
+window.cgGoPage=cgGoPage;
+
+function cgCheckReset(){
+  var s=document.getElementById('cg-search');
+  var g=document.getElementById('cg-grade-f');
+  var sz=document.getElementById('cg-size-f');
+  var hasFilter=(s&&s.value)||(g&&g.value)||(sz&&sz.value);
+  var btn=document.getElementById('cg-reset-btn');
+  if(btn){hasFilter?btn.classList.add('cg-visible'):btn.classList.remove('cg-visible');}
+}
+window.cgCheckReset=cgCheckReset;
+
+function cgReset(){
+  var s=document.getElementById('cg-search');if(s)s.value='';
+  var g=document.getElementById('cg-grade-f');if(g)g.value='';
+  var sz=document.getElementById('cg-size-f');if(sz)sz.value='';
+  var btn=document.getElementById('cg-reset-btn');
+  if(btn)btn.classList.remove('cg-visible');
+  cgGoPage(1);
+}
+window.cgReset=cgReset;
+
+/* State grid functions */
+function cgBuildStateData(){
+  var map={};
+  CG_ALL.forEach(function(d){
+    if(!map[d.state])map[d.state]={abbr:d.state,name:STATE_NAMES[d.state]||d.state,cities:[]};
+    map[d.state].cities.push(d);
+  });
+  return Object.keys(map).sort().map(function(s){
+    var sd=map[s];
+    var avgD=sd.cities.reduce(function(sum,c){return sum+c.decile;},0)/sd.cities.length;
+    var grade='F';
+    if(avgD>=8.5)grade='A';else if(avgD>=6.5)grade='B';else if(avgD>=4.5)grade='C';else if(avgD>=2.5)grade='D';
+    sd.grade=grade;
+    sd.avgViolent=Math.round(sd.cities.reduce(function(s,c){return s+c.violent;},0)/sd.cities.length);
+    return sd;
+  });
+}
+
+function cgRenderStates(filter){
+  var states=cgBuildStateData();
+  var f=filter?filter.toLowerCase():'';
+  if(f)states=states.filter(function(s){return s.abbr.toLowerCase().includes(f)||s.name.toLowerCase().includes(f);});
+  var html='';
+  states.forEach(function(s){
+    var gc=GC[s.grade]||GC.F;
+    var stColor=STATE_COLORS[s.abbr]||'#002868';
+    var flagSrc=STATE_FLAGS[s.abbr]||'';
+    html+='<div class="cg-state-card" onclick="cgSelectState(\''+s.abbr+'\')" style="box-shadow:0 2px 12px rgba(0,0,0,.07)">'
+      +'<div style="position:relative;height:80px;background:'+stColor+';overflow:hidden">'
+        +'<img src="'+flagSrc+'" alt="'+s.name+' flag" loading="lazy" '
+          +'style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.9" '
+          +'onerror="this.parentNode.style.background=\''+stColor+'\';this.remove()">'
+        +'<div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.45) 100%);pointer-events:none"></div>'
+        +'<div style="position:absolute;bottom:7px;left:10px;font-size:20px;font-weight:900;color:#fff;letter-spacing:-.02em;text-shadow:0 1px 6px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.7)">'+s.abbr+'</div>'
+      +'</div>'
+      +'<div style="padding:10px 12px 12px;background:#fff">'
+        +'<div style="height:2px;border-radius:2px;background:'+gc.bg+';opacity:.8;margin-bottom:8px"></div>'
+        +'<p style="font-size:11.5px;font-weight:700;color:#1e293b;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+s.name+'</p>'
+        +'<div style="display:flex;align-items:center;gap:4px">'
+          +'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="'+gc.bg+'" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>'
+          +'<span style="font-size:10px;color:#94a3b8">'+s.cities.length+' cit'+(s.cities.length===1?'y':'ies')+'</span>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  });
+  if(!html)html='<p style="grid-column:1/-1;text-align:center;padding:40px 0;font-size:13px;color:#94a3b8">No states match</p>';
+  document.getElementById('cg-state-grid').innerHTML=html;
+}
+
+function cgFilterStates(){
+  cgRenderStates(document.getElementById('cg-state-search').value);
+}
+window.cgFilterStates=cgFilterStates;
+window.cgLegFilter=cgLegFilter;
+
+function cgSelectState(st){
+  cgSelectedState=st;
+  cgPage=1;
+  var s=document.getElementById('cg-search');if(s)s.value='';
+  var g=document.getElementById('cg-grade-f');if(g)g.value='';
+  var sz=document.getElementById('cg-size-f');if(sz)sz.value='';
+  var rb=document.getElementById('cg-reset-btn');if(rb)rb.classList.remove('cg-visible');
+  var lbl=document.getElementById('cg-state-label');
+  if(lbl)lbl.textContent=(STATE_NAMES[st]||st)+' ('+st+')';
+  document.getElementById('cg-states-view').style.display='none';
+  document.getElementById('cg-cities-view').style.display='block';
+  cgRender();
+}
+window.cgSelectState=cgSelectState;
+
+function cgBackToStates(){
+  cgSelectedState='';
+  var ap=document.getElementById('cg-ai-panel');if(ap)ap.classList.remove('cg-show');
+  document.getElementById('cg-cities-view').style.display='none';
+  document.getElementById('cg-states-view').style.display='block';
+}
+window.cgBackToStates=cgBackToStates;
+
+/* Interactive US Map */
+var cgMapBuilt=false,cgMapDepsOK=false;
+var FIPS_ABBR={"01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC","12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY","22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN","28":"MS","29":"MO","30":"MT","31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH","40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN","48":"TX","49":"UT","50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY"};
+
+function cgLoadMapDeps(cb){
+  if(cgMapDepsOK){cb();return;}
+  var s1=document.createElement('script');
+  s1.src='https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
+  s1.onload=function(){
+    var s2=document.createElement('script');
+    s2.src='https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';
+    s2.onload=function(){cgMapDepsOK=true;cb();};
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
+}
+
+function cgInitMap(){
+  if(cgMapBuilt)return;
+  var wrap=document.getElementById('cg-map-wrap');
+  if(!wrap)return;
+  cgLoadMapDeps(function(){
+    var states=cgBuildStateData();
+    var gradeOf={};
+    states.forEach(function(s){gradeOf[s.abbr]=s;});
+    fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
+      .then(function(r){return r.json();})
+      .then(function(us){
+        var loading=document.getElementById('cg-map-loading');
+        var svgEl=document.getElementById('cg-us-map-svg');
+        if(loading)loading.style.display='none';
+        if(!svgEl)return;
+        svgEl.style.display='block';
+        var W=wrap.clientWidth-40;
+        var H=Math.max(220,Math.round(W*0.57));
+        var topo=topojson.feature(us,us.objects.states);
+        var features=topo.features;
+        var projection=d3.geoAlbersUsa().fitSize([W,H],topo);
+        var pathGen=d3.geoPath().projection(projection);
+        var tooltip=document.getElementById('cg-map-tooltip');
+        var svg=d3.select('#cg-us-map-svg')
+          .attr('viewBox','0 0 '+W+' '+H)
+          .attr('width','100%').attr('height',H);
+        svg.append('rect').attr('width',W).attr('height',H).attr('fill','#f1f5f9').attr('rx',6);
+        svg.selectAll('path.cg-sp')
+          .data(features).enter().append('path').attr('class','cg-sp')
+          .attr('d',pathGen)
+          .attr('fill',function(d){
+            var abbr=FIPS_ABBR[('00'+d.id).slice(-2)];
+            var s=gradeOf[abbr];
+            return s?CG_MAP_GRADE[s.grade]:'#1a2744';
+          })
+          .attr('stroke','#f1f5f9').attr('stroke-width',0.8)
+          .attr('fill-opacity',0.88).style('cursor','pointer')
+          .on('mouseover',function(event,d){
+            d3.select(this).raise().attr('fill-opacity',1).attr('stroke','rgba(255,255,255,.7)').attr('stroke-width',1.8);
+            var abbr=FIPS_ABBR[('00'+d.id).slice(-2)];
+            var s=gradeOf[abbr];
+            if(s&&tooltip){
+              var gc=CG_MAP_GRADE[s.grade]||CG_MAP_GRADE.F;
+              tooltip.innerHTML='<div style="font-weight:800;color:'+gc+';font-size:13px">'+s.name+'</div>'
+                +'<div style="color:#64748b;font-size:10px;margin-top:2px">Grade <span style="color:'+gc+';font-weight:900">'+s.grade+'</span> · '+s.cities.length+' '+(s.cities.length===1?'city':'cities')+'</div>';
+              tooltip.style.display='block';
+              var rect=wrap.getBoundingClientRect();
+              tooltip.style.left=Math.min(event.clientX-rect.left+18,rect.width-170)+'px';
+              tooltip.style.top=Math.max(40,event.clientY-rect.top-60)+'px';
+            }
+          })
+          .on('mousemove',function(event){
+            if(tooltip&&tooltip.style.display==='block'){
+              var rect=wrap.getBoundingClientRect();
+              tooltip.style.left=Math.min(event.clientX-rect.left+18,rect.width-170)+'px';
+              tooltip.style.top=Math.max(40,event.clientY-rect.top-60)+'px';
+            }
+          })
+          .on('mouseout',function(){
+            d3.select(this).attr('fill-opacity',0.88).attr('stroke','#f1f5f9').attr('stroke-width',0.8);
+            if(tooltip)tooltip.style.display='none';
+          })
+          .on('click',function(event,d){
+            var abbr=FIPS_ABBR[('00'+d.id).slice(-2)];
+            if(abbr)cgSelectState(abbr);
+          });
+        svg.append('path')
+          .datum(topojson.mesh(us,us.objects.states,function(a,b){return a!==b;}))
+          .attr('fill','none').attr('stroke','rgba(255,255,255,.07)').attr('stroke-width',0.4)
+          .attr('d',pathGen);
+        svg.selectAll('text.cg-sl')
+          .data(features).enter().append('text').attr('class','cg-sl')
+          .attr('transform',function(d){var c=pathGen.centroid(d);return c&&isFinite(c[0])?'translate('+c+')':'translate(-9999,-9999)';})
+          .attr('text-anchor','middle').attr('dy','.35em')
+          .style('fill','rgba(255,255,255,.95)').style('font-size','7px').style('font-weight','800')
+          .style('pointer-events','none').style('text-shadow','0 1px 3px rgba(0,0,0,.7),0 0 6px rgba(0,0,0,.5)')
+          .text(function(d){return FIPS_ABBR[('00'+d.id).slice(-2)]||'';});
+        cgMapBuilt=true;
+      })
+      .catch(function(){
+        var l=document.getElementById('cg-map-loading');
+        if(l){l.innerHTML='Map unavailable';l.style.display='flex';}
+      });
+  });
+}
+window.cgInitMap=cgInitMap;
+
+function cgRender(){
+  var data=cgGetFiltered();
+  var total=data.length;
+  var pages=Math.ceil(total/CG_PER)||1;
+  if(cgPage>pages)cgPage=1;
+  var slice=data.slice((cgPage-1)*CG_PER,cgPage*CG_PER);
+
+  document.getElementById('cg-count').textContent=total+' cities';
+
+  var NAT={city:'🇺🇸 National avg',state:'USA',pop:330e6,violent:359,property:1760,murder:5.0,total:2119,grade:'C',decile:5,rank:'—',trend:'dn',nat:true};
+  var rows=[NAT].concat(slice).map(function(d,idx){
+    var gc=GC[d.grade]||GC.C;
+    var dc=d.nat?'#94a3b8':DC[(d.decile||5)-1];
+    var vw=Math.round(d.violent/CG_MAX_V*100);
+    var pw=Math.round(d.property/CG_MAX_P*100);
+    var tr=d.trend==='dn'
+      ?'<span class="cg-dn" title="Improving">↓</span>'
+      :d.trend==='up'?'<span class="cg-up" title="Worsening">↑</span>'
+      :'<span class="cg-flat">→</span>';
+    var ab=d.nat?'':'<button class="cg-analyze-btn" onclick="event.stopPropagation();cgAnalyze(\''+d.city.replace(/'/g,"\\'")+'\',\''+d.state+'\','+d.violent+','+d.property+','+d.murder+',\''+d.grade+'\','+d.decile+')">View ›</button>';
+    var delay=(idx*0.03).toFixed(2);
+    var clickAttr=d.nat?'':' onclick="cgAnalyze(\''+d.city.replace(/'/g,"\\'")+'\',\''+d.state+'\','+d.violent+','+d.property+','+d.murder+',\''+d.grade+'\','+d.decile+')" style="cursor:pointer;animation-delay:'+delay+'s" onmouseover="this.style.background=\'#fafbfd\'" onmouseout="this.style.background=\'\'"';
+    return '<tr class="cg-row-in'+(d.nat?' cg-nat':'')+'"'+(d.nat?' style="animation-delay:'+delay+'s"':clickAttr)+'>'
+      +'<td style="font-size:11px;color:#94a3b8;font-weight:600">'+d.rank+'</td>'
+      +'<td><span class="cg-city">'+d.city+'<span class="cg-stag">'+d.state+'</span></span><span class="cg-ptag">'+cgFmtPop(d.pop||0)+'</span></td>'
+      +'<td><span class="cg-grade-b" style="background:'+gc.bg+';color:'+gc.tx+'">'+d.grade+'</span></td>'
+      +'<td><span class="cg-decile-b" style="background:'+dc+'22;color:'+dc+';border:1px solid '+dc+'55">'+d.decile+'</span></td>'
+      +'<td><div style="font-size:12.5px;font-weight:600;color:#334155">'+d.violent.toLocaleString()+'</div><div class="cg-rbar"><div class="cg-rbar-f" style="width:'+vw+'%;background:#E24B4A"></div></div></td>'
+      +'<td><div style="font-size:12.5px;font-weight:600;color:#334155">'+d.property.toLocaleString()+'</div><div class="cg-rbar"><div class="cg-rbar-f" style="width:'+pw+'%;background:#3b82f6"></div></div></td>'
+      +'<td style="font-size:12.5px;color:#64748b">'+d.murder+'</td>'
+      +'<td style="font-size:12.5px;font-weight:700;color:#334155">'+(d.violent+d.property).toLocaleString()+'</td>'
+      +'<td style="font-size:11px;color:#94a3b8">'+cgFmtPop(d.pop||0)+'</td>'
+      +'<td>'+tr+'</td>'
+      +'<td>'+ab+'</td>'
+      +'</tr>';
+  }).join('');
+  document.getElementById('cg-tbody').innerHTML=rows;
+
+  var pg='<span style="font-size:12px;color:#94a3b8;margin-right:8px">Showing '+Math.min((cgPage-1)*CG_PER+1,total)+'–'+Math.min(cgPage*CG_PER,total)+' of '+total+'</span>';
+  if(pages>1){
+    if(cgPage>1)pg+='<button class="cg-pg-btn" onclick="cgGoPage('+(cgPage-1)+')">← Prev</button>';
+    var s=Math.max(1,cgPage-2),e=Math.min(pages,cgPage+2);
+    for(var i=s;i<=e;i++)pg+='<button class="cg-pg-btn'+(i===cgPage?' cg-pga':'')+'" onclick="cgGoPage('+i+')">'+i+'</button>';
+    if(cgPage<pages)pg+='<button class="cg-pg-btn" onclick="cgGoPage('+(cgPage+1)+')">Next →</button>';
+  }
+  document.getElementById('cg-pg').innerHTML=pg;
+}
+
+function cgAnalyze(city,state,violent,property,murder,grade,decile){
+  var panel=document.getElementById('cg-ai-panel');
+  var gc=GC[grade]||GC.C;
+  document.getElementById('cg-ai-title').textContent=city+', '+state+' — Grade '+grade+' · Decile '+decile+'/10';
+  var natViolent=359,natProp=1760,natMurder=5.0;
+  var vPct=Math.round((violent/natViolent-1)*100);
+  var pPct=Math.round((property/natProp-1)*100);
+  var mPct=Math.round((murder/natMurder-1)*100);
+  var vComp=vPct>0?((vPct>50?'significantly ':'')+(vPct>0?'above':'below')+' the national average (+'+vPct+'%)'):'below the national average ('+(vPct)+'%)';
+  var gradeDesc={A:'among the safest cities in the US',B:'safer than most US cities',C:'near the national average for safety',D:'above average in crime compared to most US cities',F:'one of the highest-crime cities in the dataset'};
+  var safetyTip=grade==='A'||grade==='B'?'Residents generally enjoy a lower risk of crime. Standard urban precautions apply.':grade==='C'?'Exercise normal urban awareness, particularly at night and in unfamiliar areas.':'Exercise heightened vigilance, especially in high-crime neighborhoods. Avoid walking alone at night in unfamiliar areas and keep valuables out of sight.';
+  var analysis='Overall 2024 Safety: '+city+' earned a Grade '+grade+' (Decile '+decile+'/10), '+gradeDesc[grade]+'. With '+violent.toLocaleString()+' violent crimes per 100,000 residents, the city is '+vComp+' (national: 359). Property crime stands at '+property.toLocaleString()+'/100k, '+(pPct>0?'+'+pPct+'%':''+pPct+'%')+' vs. the national average of 1,760.\n\nWhat it means for daily life: The murder rate of '+murder+' per 100,000 is '+(mPct>0?Math.abs(mPct)+'% above':'within range of')+' the national average of 5.0. Total crime index: '+(violent+property).toLocaleString()+'/100k. These figures reflect the overall risk environment — individual neighborhoods within the city can vary significantly.\n\nStay safe: '+safetyTip+' The Auxilio app provides real-time alerts and one-tap emergency response for residents and visitors of '+city+'.';
+  document.getElementById('cg-ai-body').style.whiteSpace='pre-line';
+  document.getElementById('cg-ai-body').textContent=analysis;
+  panel.classList.add('cg-show');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+window.cgAnalyze=cgAnalyze;
+
+/* Nav scroll shadow */
+(function(){
+  var nav=document.querySelector('[data-nav]');
+  if(nav){
+    window.addEventListener('scroll',function(){
+      nav.classList.toggle('is-scrolled',window.scrollY>10);
+    },{passive:true});
+  }
+  /* Mobile menu toggle — hamburger button if needed */
+})();
+
+/* Run cgInit on DOMContentLoaded */
+document.addEventListener('DOMContentLoaded', function(){
+  cgPage=1;
+  cgSelectedState='';
+  cgRenderStates();
+  document.getElementById('cg-states-view').style.display='block';
+  document.getElementById('cg-cities-view').style.display='none';
+  var ap=document.getElementById('cg-ai-panel');if(ap)ap.classList.remove('cg-show');
+  window.scrollTo(0,0);
+  /* Build the interactive US map */
+  setTimeout(cgInitMap, 80);
+});
+
+})();
+</script>
+
+</body>
+</html>
