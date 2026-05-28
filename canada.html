@@ -119,22 +119,92 @@
     </div>
 </header>
 <main style="padding-top:78px">
-<section style="background:radial-gradient(ellipse at 18% -10%,rgba(255,255,255,.5) 0%,transparent 55%),radial-gradient(ellipse at 90% 110%,rgba(13,90,30,.55) 0%,transparent 55%),linear-gradient(160deg,#34d058 0%,#22A620 44%,#1c8a1a 72%,#15691a 100%);padding:96px 0 96px">
-  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
-    <div style="font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.24em;text-transform:uppercase;margin-bottom:18px">Auxilio · Crime Grade Map</div>
-    <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-      <div><h1 style="font-size:38px;font-weight:900;color:#fff;margin:0 0 8px;letter-spacing:-.02em;line-height:1.05"><img class="flag-ic-lg" src="https://flagcdn.com/w80/ca.png" alt="" /> Canada</h1><p style="font-size:14px;color:rgba(255,255,255,.65);margin:0">13 Provinces &amp; Territories · Homicide /100k · StatCan Data · 2022</p></div>
-      <div style="margin-left:auto;display:flex;gap:14px;flex-wrap:wrap">
-        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:24px 30px;text-align:center;min-width:124px"><div style="font-size:38px;font-weight:900;color:#fff;line-height:1">13</div><div style="font-size:10.5px;color:rgba(255,255,255,.55);margin-top:10px;letter-spacing:.1em;text-transform:uppercase">Regions</div></div>
-        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:24px 30px;text-align:center;min-width:124px"><div style="font-size:38px;font-weight:900;color:#fff;line-height:1">2</div><div style="font-size:10.5px;color:rgba(255,255,255,.55);margin-top:10px;letter-spacing:.1em;text-transform:uppercase">Natl Avg /100k</div></div>
-        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:24px 30px;text-align:center;min-width:124px"><div style="font-size:38px;font-weight:900;color:#fff;line-height:1" id="ca-stat-min">1</div><div style="font-size:10.5px;color:rgba(255,255,255,.55);margin-top:10px;letter-spacing:.1em;text-transform:uppercase">Min /100k</div></div>
-        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:24px 30px;text-align:center;min-width:124px"><div style="font-size:38px;font-weight:900;color:#fff;line-height:1" id="ca-stat-max">13</div><div style="font-size:10.5px;color:rgba(255,255,255,.55);margin-top:10px;letter-spacing:.1em;text-transform:uppercase">Max /100k</div></div>
+<section style="position:relative;overflow:hidden;min-height:calc(100vh - 78px);display:flex;flex-direction:column;justify-content:center;background:radial-gradient(ellipse at 18% -10%,rgba(255,255,255,.5) 0%,transparent 55%),radial-gradient(ellipse at 90% 110%,rgba(13,90,30,.55) 0%,transparent 55%),linear-gradient(160deg,#34d058 0%,#22A620 44%,#1c8a1a 72%,#15691a 100%)">
+
+  <!-- grid overlay -->
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(6,52,15,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(6,52,15,.08) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 90% at 50% 30%,black,transparent 85%);mask-image:radial-gradient(ellipse 80% 90% at 50% 30%,black,transparent 85%)"></div>
+  <!-- glows -->
+  <div style="position:absolute;pointer-events:none;z-index:0;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.5) 0%,transparent 70%);top:-240px;left:-180px;filter:blur(40px)"></div>
+  <div style="position:absolute;pointer-events:none;z-index:0;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,rgba(13,90,30,.5) 0%,transparent 70%);bottom:-240px;right:-200px;filter:blur(40px)"></div>
+
+  <!-- decorative province-ranking art -->
+  <div class="hidden md:block" style="position:absolute;right:15%;top:50%;transform:translateY(-50%);width:clamp(340px,26vw,430px);height:clamp(340px,26vw,430px);pointer-events:none;z-index:0">
+    <svg viewBox="0 0 200 200" style="width:100%;height:100%">
+      <defs><radialGradient id="cg-rank-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".1"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>
+      <circle cx="100" cy="100" r="92" fill="url(#cg-rank-glow)"/>
+      <circle cx="100" cy="100" r="92" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+      <text x="100" y="24" text-anchor="middle" font-size="6.5" font-weight="700" fill="rgba(255,255,255,.55)" font-family="system-ui,sans-serif" letter-spacing="1.8">PROVINCIAL SAFETY RANKINGS</text>
+      <rect x="15" y="34" width="170" height="30" rx="5" fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.32)" stroke-width=".7"/>
+      <rect x="155" y="38" width="24" height="22" rx="4" fill="#15803d"/>
+      <text x="167" y="54" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="system-ui,sans-serif">A</text>
+      <text x="25" y="53" font-size="7" font-weight="800" fill="rgba(255,255,255,.45)" font-family="system-ui,sans-serif">01</text>
+      <text x="40" y="53" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.95)" font-family="system-ui,sans-serif">Quebec</text>
+      <rect x="15" y="72" width="170" height="30" rx="5" fill="rgba(255,255,255,.11)" stroke="rgba(255,255,255,.24)" stroke-width=".7"/>
+      <rect x="155" y="76" width="24" height="22" rx="4" fill="#2563eb"/>
+      <text x="167" y="92" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="system-ui,sans-serif">B</text>
+      <text x="25" y="91" font-size="7" font-weight="800" fill="rgba(255,255,255,.45)" font-family="system-ui,sans-serif">02</text>
+      <text x="40" y="91" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.82)" font-family="system-ui,sans-serif">Ontario</text>
+      <rect x="15" y="110" width="170" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.18)" stroke-width=".7"/>
+      <rect x="155" y="114" width="24" height="22" rx="4" fill="#ca8a04"/>
+      <text x="167" y="130" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="system-ui,sans-serif">C</text>
+      <text x="25" y="129" font-size="7" font-weight="800" fill="rgba(255,255,255,.45)" font-family="system-ui,sans-serif">03</text>
+      <text x="40" y="129" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.68)" font-family="system-ui,sans-serif">Alberta</text>
+      <rect x="15" y="148" width="170" height="30" rx="5" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.13)" stroke-width=".7"/>
+      <rect x="155" y="152" width="24" height="22" rx="4" fill="#dc2626"/>
+      <text x="167" y="168" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="system-ui,sans-serif">F</text>
+      <text x="25" y="167" font-size="7" font-weight="800" fill="rgba(255,255,255,.45)" font-family="system-ui,sans-serif">04</text>
+      <text x="40" y="167" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.52)" font-family="system-ui,sans-serif">Manitoba</text>
+      <circle cx="8" cy="64" r="2" fill="rgba(255,255,255,.3)"><animate attributeName="opacity" values="1;.2;1" dur="2.2s" repeatCount="indefinite"/></circle>
+      <circle cx="192" cy="118" r="2" fill="rgba(255,255,255,.25)"><animate attributeName="opacity" values=".6;.1;.6" dur="3s" repeatCount="indefinite"/></circle>
+      <circle cx="8" cy="158" r="1.5" fill="rgba(255,255,255,.2)"><animate attributeName="opacity" values=".4;.1;.4" dur="2.7s" repeatCount="indefinite"/></circle>
+    </svg>
+  </div>
+
+  <!-- content -->
+  <div class="w-full mx-auto max-w-7xl px-5 sm:px-8" style="position:relative;z-index:10;padding-top:2rem;padding-bottom:3rem">
+
+    <div class="inline-flex items-center gap-2.5" style="background:rgba(255,255,255,.65);border:1px solid rgba(6,52,15,.2);border-radius:8px;padding:6px 14px;margin-bottom:24px">
+      <span style="width:7px;height:7px;border-radius:50%;background:#15803d;box-shadow:0 0 7px rgba(21,128,61,.7)"></span>
+      <span style="font-size:10.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#15691a">Provincial Safety Rankings</span>
+    </div>
+
+    <h1 style="font-size:clamp(40px,4.5vw,72px);font-weight:900;line-height:1.03;letter-spacing:-.02em;color:#06340f;margin:0 0 20px">
+      Find the<br>
+      <span style="color:#ffffff">Safest Areas</span>
+    </h1>
+
+    <p style="font-size:17px;line-height:1.65;color:rgba(6,52,15,.78);max-width:34rem;margin:0 0 28px">
+      Letter-grade safety rankings for Canada's <strong style="font-weight:800;color:#06340f">13</strong> provinces &amp; territories — transparent, data-driven, and updated annually.
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px">
+      <a href="#download" style="display:inline-flex;transition:transform .15s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'"><img src="/images/app-store-badge.png" alt="App Store" style="height:52px;width:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.18)" /></a>
+      <a href="#download" style="display:inline-flex;transition:transform .15s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'"><img src="/images/google-play-badge.png" alt="Google Play" style="height:52px;width:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.18)" /></a>
+    </div>
+
+    <dl class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5 max-w-xl mb-8">
+      <div><dt style="font-size:1.5rem;font-weight:800;letter-spacing:-.02em;color:#fff">13</dt><dd style="margin-top:4px;font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:rgba(255,255,255,.55)">Regions</dd></div>
+      <div><dt style="font-size:1.5rem;font-weight:800;letter-spacing:-.02em;color:#fff">2</dt><dd style="margin-top:4px;font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:rgba(255,255,255,.55)">Natl Avg /100k</dd></div>
+      <div><dt style="font-size:1.5rem;font-weight:800;letter-spacing:-.02em;color:#fff" id="ca-stat-min">1</dt><dd style="margin-top:4px;font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:rgba(255,255,255,.55)">Min /100k</dd></div>
+      <div><dt style="font-size:1.5rem;font-weight:800;letter-spacing:-.02em;color:#fff" id="ca-stat-max">13</dt><dd style="margin-top:4px;font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:rgba(255,255,255,.55)">Max /100k</dd></div>
+    </dl>
+
+    <div style="max-width:34rem">
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="display:flex;align-items:center">
+          <img src="/images/officer-1.jpg" alt="" style="width:40px;height:40px;border-radius:50%;border:2px solid rgba(127,29,29,.6);object-fit:cover" />
+          <img src="/images/officer-2.jpg" alt="" style="width:40px;height:40px;border-radius:50%;border:2px solid rgba(127,29,29,.6);object-fit:cover;margin-left:-12px" />
+          <img src="/images/officer-3.jpg" alt="" style="width:40px;height:40px;border-radius:50%;border:2px solid rgba(127,29,29,.6);object-fit:cover;margin-left:-12px" />
+          <img src="/images/officer-4.jpg" alt="" style="width:40px;height:40px;border-radius:50%;border:2px solid rgba(127,29,29,.6);object-fit:cover;margin-left:-12px" />
+          <span style="width:40px;height:40px;display:grid;place-items:center;border-radius:50%;border:2px solid rgba(127,29,29,.6);background:#22A620;color:#fff;font-weight:700;font-size:11px;margin-left:-12px">5K</span>
+        </div>
+        <p style="font-size:1rem;font-weight:600;color:#fff;margin:0">5,000+ Verified Officers</p>
       </div>
+      <p style="margin-top:12px;font-size:.875rem;line-height:1.6;max-width:28rem;color:rgba(255,255,255,.65)">
+        Over 5,000 sworn officers across 30+ departments are answering faster — thanks to Auxilio Agente.
+      </p>
     </div>
-    <div style="display:flex;gap:10px;margin-top:40px;flex-wrap:wrap">
-      <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.14em;text-transform:uppercase;align-self:center;margin-right:6px">GRADES</span>
-      <span style="background:#22A620;color:#fff;border-radius:7px;padding:5px 13px;font-size:12px;font-weight:700">A &lt;8</span><span style="background:#399CD8;color:#fff;border-radius:7px;padding:5px 13px;font-size:12px;font-weight:700">B 8–18</span><span style="background:#F1B72C;color:#fff;border-radius:7px;padding:5px 13px;font-size:12px;font-weight:700">C 18–28</span><span style="background:#EE7728;color:#fff;border-radius:7px;padding:5px 13px;font-size:12px;font-weight:700">D 28–42</span><span style="background:#E6201A;color:#fff;border-radius:7px;padding:5px 13px;font-size:12px;font-weight:700">F ≥42</span>
-    </div>
+
   </div>
 </section>
 
