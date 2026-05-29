@@ -1084,7 +1084,7 @@ function cgInitMap(){
 
       if(loading)loading.style.display='none';
       container.appendChild(svgEl);
-      svgEl.querySelectorAll('path[id]').forEach(function(p){var pr=DR_PROVINCES[p.getAttribute('id')];if(!pr)return;var b;try{b=p.getBBox();}catch(e){return;}if(!b||!b.width)return;var fs=Math.max(3,Math.min(11,b.width/((pr.name.length||4)*0.56)));var t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',(b.x+b.width/2).toFixed(1));t.setAttribute('y',(b.y+b.height/2).toFixed(1));t.setAttribute('text-anchor','middle');t.setAttribute('dy','0.32em');t.setAttribute('pointer-events','none');t.setAttribute('font-family','Inter,system-ui,sans-serif');t.setAttribute('font-weight','700');t.setAttribute('font-size',fs.toFixed(1));t.setAttribute('fill','#0f172a');t.setAttribute('stroke','#fff');t.setAttribute('stroke-width',(fs*0.16).toFixed(2));t.setAttribute('paint-order','stroke');t.textContent=pr.name;svgEl.appendChild(t);});
+      svgEl.querySelectorAll('path[id]').forEach(function(p){var pr=DR_PROVINCES[p.getAttribute('id')];if(!pr)return;var ab=(p.getAttribute('id').split('-')[1]||'');if(!ab)return;var b;try{b=p.getBBox();}catch(e){return;}if(!b||!b.width)return;var fs=Math.max(4,Math.min(11,b.width/((ab.length||2)*0.62)));var t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',(b.x+b.width/2).toFixed(1));t.setAttribute('y',(b.y+b.height/2).toFixed(1));t.setAttribute('text-anchor','middle');t.setAttribute('dy','0.32em');t.setAttribute('pointer-events','none');t.setAttribute('font-family','Inter,system-ui,sans-serif');t.setAttribute('font-weight','700');t.setAttribute('font-size',fs.toFixed(1));t.setAttribute('fill','#0f172a');t.setAttribute('stroke','#fff');t.setAttribute('stroke-width',(fs*0.16).toFixed(2));t.setAttribute('paint-order','stroke');t.textContent=ab;svgEl.appendChild(t);});
       cgMapBuilt=true;
     })
     .catch(function(){
@@ -1494,7 +1494,7 @@ function cgRenderProvGrid(){
   var SVG_UP='<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>';
   var SVG_DN='<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>';
   var SVG_USERS='<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.7"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>';
-  var sortedByHom=filtered.slice().sort(function(a,b){return b.homicide-a.homicide;});
+  var sortedByHom=filtered.slice().sort(function(a,b){return a.homicide-b.homicide;});filtered=sortedByHom;
   filtered.forEach(function(d,i){
     var g=cgGrade(d.homicide);
     var gc=CG_GC[g]||CG_GC.C;
